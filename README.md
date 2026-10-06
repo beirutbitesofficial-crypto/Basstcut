@@ -43,7 +43,18 @@ npm run build && npm start
 - The haircut scene rebuilds only on real width changes on touch devices, so mobile address-bar
   show/hide never re-lays out the pin.
 
-## Static hosting
+## Hosting on Hostinger
 
-The page is fully static. To export plain HTML (e.g. for shared hosting), add `output: "export"` and
-`images: { unoptimized: true }` to `next.config.ts`, run `npm run build`, and upload `out/`.
+The site is configured as a **static export** (`output: "export"` in `next.config.ts`) — no Node.js needed.
+
+1. `npm install && npm run build` → everything is written to `out/` (≈1.2 MB, includes `.htaccess`).
+2. In hPanel → **Websites → Manage → File Manager**, open the domain's `public_html`.
+3. Upload the **contents** of `out/` (not the folder itself) — or upload a zip of them and use *Extract*.
+   Make sure the hidden `.htaccess` file is included.
+4. Visit the domain. Enable SSL in hPanel → **Security → SSL** if it is not already on.
+
+The site must sit at the root of a domain or subdomain (e.g. `basstcut.com` or `basstcut.yourdomain.com`),
+because asset paths start with `/_next/`. If it has to live in a sub-folder, set `basePath: "/folder"` in
+`next.config.ts` and rebuild.
+
+To update the site later: edit, `npm run build`, and re-upload `out/`.
