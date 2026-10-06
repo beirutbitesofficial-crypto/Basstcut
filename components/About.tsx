@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { gsap, MQ, useGSAP } from "@/lib/gsap";
 import Scissors, { PIVOT_X, PIVOT_Y, ScissorsOutline } from "./Scissors";
 import { SplitWords } from "./SplitText";
+import { BrushStroke } from "./Brush";
 
 /** Loose hair clippings that drift through the section — carried over from the cut. */
 const CLIPPINGS = [
@@ -54,6 +55,12 @@ export default function About() {
             stagger: 0.08,
             scrollTrigger: { trigger: q(".ab-copy")[0], start: "top 85%", end: "bottom 55%", scrub: true },
           }
+        );
+
+        gsap.fromTo(
+          q(".ab-brush"),
+          { scaleX: 0 },
+          { scaleX: 1, ease: "power2.out", scrollTrigger: { trigger: q(".ab-title")[0], start: "top 60%", end: "bottom 45%", scrub: 0.6 } }
         );
 
         gsap.fromTo(
@@ -148,6 +155,10 @@ export default function About() {
             </span>
           </span>
         </h2>
+
+        <div className="ab-brush mt-2 w-[70vw] origin-left text-terracotta md:ml-[18vw] md:w-[46vw]" aria-hidden="true">
+          <BrushStroke className="h-5 w-full md:h-10" />
+        </div>
 
         <div className="mt-14 grid gap-10 md:mt-24 md:grid-cols-12">
           <div className="hidden md:col-span-4 md:block">

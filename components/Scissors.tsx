@@ -56,7 +56,7 @@ export default function Scissors({ className, halfARef, halfBRef }: Props) {
         </linearGradient>
         <radialGradient id={screw} cx="0.35" cy="0.35" r="0.8">
           <stop offset="0" stopColor="#f0a58f" />
-          <stop offset="0.55" stopColor="#C25A43" />
+          <stop offset="0.55" stopColor="#EF6240" />
           <stop offset="1" stopColor="#5e2516" />
         </radialGradient>
       </defs>
@@ -87,7 +87,7 @@ export default function Scissors({ className, halfARef, halfBRef }: Props) {
           rx="48"
           ry="28"
           transform="rotate(12 118 50)"
-          stroke="#C25A43"
+          stroke="#EF6240"
           strokeOpacity=".55"
           strokeWidth="1.2"
         />
@@ -100,7 +100,7 @@ export default function Scissors({ className, halfARef, halfBRef }: Props) {
           fill={`url(#${steel})`}
         />
         <path d="M262 96 C380 92 500 99 600 109" stroke="#fff" strokeOpacity=".7" strokeWidth="1.2" />
-        <path d="M250 109.2 L604 109.2" stroke="#1e1e1e" strokeOpacity=".45" strokeWidth=".8" />
+        <path d="M250 109.2 L604 109.2" stroke="#141110" strokeOpacity=".45" strokeWidth=".8" />
         <path
           d="M262 102 C220 106 192 124 168 144 L178 158 C202 138 228 124 262 120 Z"
           fill={`url(#${handle})`}
@@ -120,7 +120,7 @@ export default function Scissors({ className, halfARef, halfBRef }: Props) {
           rx="52"
           ry="30"
           transform="rotate(-10 122 170)"
-          stroke="#C25A43"
+          stroke="#EF6240"
           strokeOpacity=".55"
           strokeWidth="1.2"
         />
@@ -129,7 +129,7 @@ export default function Scissors({ className, halfARef, halfBRef }: Props) {
 
       {/* Pivot screw (does not rotate) */}
       <circle cx={PIVOT_X} cy={PIVOT_Y} r="11" fill={`url(#${screw})`} />
-      <circle cx={PIVOT_X} cy={PIVOT_Y} r="11" stroke="#1e1e1e" strokeOpacity=".5" />
+      <circle cx={PIVOT_X} cy={PIVOT_Y} r="11" stroke="#141110" strokeOpacity=".5" />
       <path d={`M${PIVOT_X - 6} ${PIVOT_Y + 3} L${PIVOT_X + 6} ${PIVOT_Y - 3}`} stroke="#3b160d" strokeWidth="2" strokeLinecap="round" />
     </svg>
   );

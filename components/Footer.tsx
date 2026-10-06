@@ -1,5 +1,6 @@
 import { site } from "@/lib/site";
 import { ScissorsOutline } from "./Scissors";
+import { BrushStroke } from "./Brush";
 
 export default function Footer() {
   return (
@@ -9,6 +10,7 @@ export default function Footer() {
           <p className="font-display text-[18vw] uppercase leading-[0.82] tracking-tight md:text-[7vw]">
             BASST <span className="text-terracotta">CUT</span>
           </p>
+          <BrushStroke className="mt-1 h-4 w-48 text-terracotta md:h-5 md:w-72" />
           <p className="mt-4 font-sans text-xs font-semibold uppercase tracking-[0.5em] text-beige">{site.tagline}</p>
           <p className="mt-2 font-serif text-lg italic text-offwhite/60">Abra, Sidon</p>
         </div>

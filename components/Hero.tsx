@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import { gsap, MQ, useGSAP } from "@/lib/gsap";
 import Logo from "./Logo";
+import { BrushSlashes } from "./Brush";
 
 export default function Hero() {
   const root = useRef<HTMLElement>(null);
@@ -91,7 +92,7 @@ export default function Hero() {
         className="hero-light hero-reveal pointer-events-none absolute -inset-x-[10%] -top-[10%] h-[80%] invisible-pre"
         style={{
           background:
-            "radial-gradient(ellipse 40% 55% at 50% 30%, rgba(194,90,67,0.28), transparent 70%), radial-gradient(ellipse 22% 40% at 50% 10%, rgba(244,240,232,0.10), transparent 70%)",
+            "radial-gradient(ellipse 40% 55% at 50% 30%, rgba(239, 98, 64,0.28), transparent 70%), radial-gradient(ellipse 22% 40% at 50% 10%, rgba(244,240,232,0.10), transparent 70%)",
         }}
         aria-hidden="true"
       />
@@ -112,6 +113,9 @@ export default function Hero() {
       </div>
 
       <div className="hero-chrome pointer-events-none absolute inset-0 z-10">
+        {/* Orange dry-brush scratches on the edges, as on the BASST CUT posters */}
+        <BrushSlashes className="hero-corner hero-reveal invisible-pre absolute -left-6 top-[18%] h-[38%] text-terracotta/45 md:left-0 md:h-[48%]" />
+        <BrushSlashes className="hero-corner hero-reveal invisible-pre absolute -right-6 bottom-[8%] h-[34%] rotate-180 text-terracotta/40 md:right-0 md:h-[44%]" />
         {/* Corners — tiny editorial details */}
         <div className="hero-corner hero-reveal invisible-pre absolute left-5 top-5 font-sans text-[10px] uppercase tracking-[0.4em] text-offwhite/50 md:left-10 md:top-8">
           Barbershop
@@ -139,23 +143,23 @@ function HeroBackdrop() {
     <svg className="h-full w-full" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
       <defs>
         <radialGradient id="hb-floor" cx="0.5" cy="1" r="0.7">
-          <stop offset="0" stopColor="#C25A43" stopOpacity=".35" />
+          <stop offset="0" stopColor="#EF6240" stopOpacity=".35" />
           <stop offset="0.5" stopColor="#3a1d15" stopOpacity=".3" />
-          <stop offset="1" stopColor="#1E1E1E" stopOpacity="0" />
+          <stop offset="1" stopColor="#141110" stopOpacity="0" />
         </radialGradient>
         <linearGradient id="hb-wall" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0" stopColor="#141312" />
-          <stop offset="0.6" stopColor="#1E1E1E" />
+          <stop offset="0.6" stopColor="#141110" />
           <stop offset="1" stopColor="#24170f" />
         </linearGradient>
         <linearGradient id="hb-beam" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#E8D9C4" stopOpacity=".12" />
-          <stop offset="1" stopColor="#E8D9C4" stopOpacity="0" />
+          <stop offset="0" stopColor="#EBDFD0" stopOpacity=".12" />
+          <stop offset="1" stopColor="#EBDFD0" stopOpacity="0" />
         </linearGradient>
       </defs>
       <rect width="1600" height="1000" fill="url(#hb-wall)" />
       {/* receding arches */}
-      <g fill="none" stroke="#C25A43">
+      <g fill="none" stroke="#EF6240">
         {arches.map((i) => {
           const s = 1 - i * 0.14;
           const w = 760 * s;
@@ -174,14 +178,14 @@ function HeroBackdrop() {
         })}
       </g>
       {/* side arches / mirrors */}
-      <g fill="#E8D9C4" fillOpacity=".025" stroke="#E8D9C4" strokeOpacity=".08">
+      <g fill="#EBDFD0" fillOpacity=".025" stroke="#EBDFD0" strokeOpacity=".08">
         <path d="M70 1000 V560 a110 110 0 0 1 220 0 V1000 Z" />
         <path d="M1310 1000 V560 a110 110 0 0 1 220 0 V1000 Z" />
       </g>
       {/* light beams */}
       <path d="M690 0 L910 0 L1120 1000 L480 1000 Z" fill="url(#hb-beam)" />
       <rect y="560" width="1600" height="440" fill="url(#hb-floor)" />
-      <path d="M0 905 H1600" stroke="#E8D9C4" strokeOpacity=".07" />
+      <path d="M0 905 H1600" stroke="#EBDFD0" strokeOpacity=".07" />
     </svg>
   );
 }

@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { gsap, MQ, useGSAP } from "@/lib/gsap";
 import { site } from "@/lib/site";
 import { SplitWords } from "./SplitText";
+import { BrushStroke } from "./Brush";
 
 export default function Location() {
   const root = useRef<HTMLElement>(null);
@@ -111,6 +112,9 @@ export default function Location() {
               </span>
             </span>
           </h2>
+          <div className="lc-meta mt-1 w-56 text-terracotta md:w-80" aria-hidden="true">
+            <BrushStroke className="h-4 w-full md:h-6" />
+          </div>
 
           <div className="mt-10 flex flex-col gap-8 md:mt-14 md:flex-row md:items-end md:gap-14">
             <div className="lc-meta">
@@ -158,25 +162,25 @@ export default function Location() {
 function StylizedMap() {
   return (
     <svg className="h-full w-full" viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-      <rect width="400" height="500" fill="#E8D9C4" />
+      <rect width="400" height="500" fill="#EBDFD0" />
       {/* sea */}
-      <path d="M0 0 H96 C86 70 112 120 92 180 C74 236 104 300 84 360 C70 410 88 460 80 500 H0 Z" fill="#1E1E1E" fillOpacity=".9" />
+      <path d="M0 0 H96 C86 70 112 120 92 180 C74 236 104 300 84 360 C70 410 88 460 80 500 H0 Z" fill="#141110" fillOpacity=".9" />
       {Array.from({ length: 9 }, (_, i) => (
-        <path key={i} d={`M8 ${40 + i * 52} q12 -6 24 0 t24 0`} stroke="#E8D9C4" strokeOpacity=".18" fill="none" />
+        <path key={i} d={`M8 ${40 + i * 52} q12 -6 24 0 t24 0`} stroke="#EBDFD0" strokeOpacity=".18" fill="none" />
       ))}
-      <text x="22" y="470" fill="#E8D9C4" fillOpacity=".5" fontSize="9" letterSpacing="3" style={{ fontFamily: "var(--font-sans)" }}>
+      <text x="22" y="470" fill="#EBDFD0" fillOpacity=".5" fontSize="9" letterSpacing="3" style={{ fontFamily: "var(--font-sans)" }}>
         MEDITERRANEAN
       </text>
 
       {/* contour lines (hills of Abra) */}
-      <g fill="none" stroke="#C25A43" strokeOpacity=".22">
+      <g fill="none" stroke="#EF6240" strokeOpacity=".22">
         <path d="M200 120 C260 90 340 110 380 160 C400 200 380 260 330 270 C270 280 220 240 200 200 C188 170 186 140 200 120 Z" />
         <path d="M225 140 C270 120 330 135 355 170 C370 200 350 240 315 245 C270 250 240 225 228 195 C220 175 218 155 225 140 Z" />
         <path d="M252 162 C280 150 318 160 332 182 C340 200 326 222 302 223 C276 224 258 210 252 190 Z" />
       </g>
 
       {/* roads */}
-      <g fill="none" stroke="#1E1E1E" strokeLinecap="round">
+      <g fill="none" stroke="#141110" strokeLinecap="round">
         <path className="lc-road" pathLength={1} strokeDasharray="1" strokeDashoffset="1" d="M118 0 C110 90 132 160 116 240 C104 310 124 400 110 500" strokeWidth="5" />
         <path className="lc-road" pathLength={1} strokeDasharray="1" strokeDashoffset="1" d="M120 230 C170 222 210 210 250 196 C290 182 330 186 400 170" strokeWidth="3" />
         <path className="lc-road" pathLength={1} strokeDasharray="1" strokeDashoffset="1" d="M128 330 C180 320 220 290 262 250 C280 232 300 226 340 236" strokeWidth="2" strokeOpacity=".7" />
@@ -185,17 +189,17 @@ function StylizedMap() {
       </g>
 
       {/* labels */}
-      <g style={{ fontFamily: "var(--font-sans)" }} fontSize="10" letterSpacing="3" fill="#1E1E1E">
+      <g style={{ fontFamily: "var(--font-sans)" }} fontSize="10" letterSpacing="3" fill="#141110">
         <text x="130" y="262" fillOpacity=".6">SIDON</text>
         <text x="282" y="158" fontWeight="700">ABRA</text>
       </g>
 
       {/* pin */}
       <g className="lc-pin">
-        <circle cx="268" cy="200" r="22" fill="#C25A43" fillOpacity=".18" className="pin-pulse" style={{ transformOrigin: "268px 200px" }} />
-        <path d="M268 204 C258 190 252 182 252 174 a16 16 0 0 1 32 0 C284 182 278 190 268 204 Z" fill="#C25A43" />
-        <circle cx="268" cy="174" r="5.5" fill="#F4F0E8" />
-        <text x="268" y="226" textAnchor="middle" fontSize="9" letterSpacing="2.5" fontWeight="700" fill="#1E1E1E" style={{ fontFamily: "var(--font-sans)" }}>
+        <circle cx="268" cy="200" r="22" fill="#EF6240" fillOpacity=".18" className="pin-pulse" style={{ transformOrigin: "268px 200px" }} />
+        <path d="M268 204 C258 190 252 182 252 174 a16 16 0 0 1 32 0 C284 182 278 190 268 204 Z" fill="#EF6240" />
+        <circle cx="268" cy="174" r="5.5" fill="#F6F1EA" />
+        <text x="268" y="226" textAnchor="middle" fontSize="9" letterSpacing="2.5" fontWeight="700" fill="#141110" style={{ fontFamily: "var(--font-sans)" }}>
           BASST CUT
         </text>
       </g>

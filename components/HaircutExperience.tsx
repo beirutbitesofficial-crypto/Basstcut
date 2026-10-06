@@ -5,6 +5,7 @@ import { gsap, MQ, ScrollTrigger, useGSAP } from "@/lib/gsap";
 import { HairScene, type CutLine, type Snip } from "@/lib/hair";
 import Scissors, { BLADE_REACH, PIVOT_X, PIVOT_Y, SCISSORS_VIEWBOX } from "./Scissors";
 import { SplitChars } from "./SplitText";
+import { BrushStroke } from "./Brush";
 
 /*
  * TIMELINE MAP (timeline seconds, scrubbed by scroll)
@@ -293,7 +294,9 @@ export default function HaircutExperience() {
               <SplitChars text="CUT" />
             </span>
           </h2>
-          <span className="hx-rule mt-5 block h-px w-40 origin-left bg-terracotta md:w-64" />
+          <span className="hx-rule mt-3 block w-52 origin-left text-terracotta md:mt-4 md:w-[26rem]">
+            <BrushStroke className="h-4 w-full md:h-7" />
+          </span>
           <p className="hx-sub mt-5 font-sans text-xs font-semibold uppercase tracking-[0.5em] text-terracotta md:text-sm">
             Haircut &amp; Style
           </p>
@@ -350,17 +353,17 @@ function BeneathArches() {
     >
       <defs>
         <radialGradient id="hx-glow" cx="0.5" cy="0.55" r="0.6">
-          <stop offset="0" stopColor="#F4F0E8" stopOpacity=".9" />
-          <stop offset="1" stopColor="#E8D9C4" stopOpacity="0" />
+          <stop offset="0" stopColor="#F6F1EA" stopOpacity=".9" />
+          <stop offset="1" stopColor="#EBDFD0" stopOpacity="0" />
         </radialGradient>
       </defs>
       <rect width="1600" height="1000" fill="url(#hx-glow)" />
-      <g fill="none" stroke="currentColor" strokeOpacity=".18" strokeWidth="2">
+      <g fill="none" stroke="#8F311C" strokeOpacity=".28" strokeWidth="2">
         <path d="M120 1000 V420 a170 170 0 0 1 340 0 V1000" />
         <path d="M1140 1000 V420 a170 170 0 0 1 340 0 V1000" />
         <path d="M560 1000 V330 a240 240 0 0 1 480 0 V1000" strokeOpacity=".12" />
       </g>
-      <path d="M0 960 H1600" stroke="#1E1E1E" strokeOpacity=".12" />
+      <path d="M0 960 H1600" stroke="#141110" strokeOpacity=".12" />
     </svg>
   );
 }

@@ -22,7 +22,7 @@ export default function Logo({ className = "", priority = false }: { className?:
         draggable={false}
       />
       <svg className="pointer-events-none absolute -inset-[4%] h-[108%] w-[108%]" viewBox="0 0 100 100" fill="none" aria-hidden="true">
-        <circle className="logo-ring" pathLength={1} cx="50" cy="50" r="49" stroke="#C25A43" strokeOpacity=".55" strokeWidth=".35" transform="rotate(-90 50 50)" />
+        <circle className="logo-ring" pathLength={1} cx="50" cy="50" r="49" stroke="#EF6240" strokeOpacity=".55" strokeWidth=".35" transform="rotate(-90 50 50)" />
       </svg>
     </div>
   );

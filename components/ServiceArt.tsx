@@ -15,18 +15,18 @@ export default function ServiceArt({ art }: { art: Service["art"] }) {
           <stop offset="1" stopColor="#151413" />
         </linearGradient>
         <radialGradient id={`sa-glow-${art}`} cx="0.5" cy="0.4" r="0.55">
-          <stop offset="0" stopColor="#C25A43" stopOpacity=".28" />
-          <stop offset="1" stopColor="#C25A43" stopOpacity="0" />
+          <stop offset="0" stopColor="#EF6240" stopOpacity=".28" />
+          <stop offset="1" stopColor="#EF6240" stopOpacity="0" />
         </radialGradient>
         <linearGradient id={`sa-fade-${art}`} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#1E1E1E" />
+          <stop offset="0" stopColor="#141110" />
           <stop offset="0.55" stopColor="#4a3a31" />
-          <stop offset="1" stopColor="#E8D9C4" />
+          <stop offset="1" stopColor="#EBDFD0" />
         </linearGradient>
       </defs>
       <rect width="300" height="400" fill={`url(#sa-bg-${art})`} />
       <rect width="300" height="400" fill={`url(#sa-glow-${art})`} />
-      <g fill="none" stroke="#E8D9C4" strokeLinecap="round" strokeLinejoin="round">{ART[art]}</g>
+      <g fill="none" stroke="#EBDFD0" strokeLinecap="round" strokeLinejoin="round">{ART[art]}</g>
     </svg>
   );
 }
@@ -45,7 +45,7 @@ const ART: Record<Service["art"], ReactNode> = {
       {Array.from({ length: 14 }, (_, i) => (
         <path key={i} d={`M${96 + i * 8} ${205 - Math.sin(i / 4) * 30} C${100 + i * 8} 170 ${110 + i * 6} 150 ${150 + (i - 7) * 3} 140`} strokeWidth="1.4" strokeOpacity=".8" />
       ))}
-      <path d="M60 120 L240 104" stroke="#C25A43" strokeWidth="1.5" strokeDasharray="6 6" />
+      <path d="M60 120 L240 104" stroke="#EF6240" strokeWidth="1.5" strokeDasharray="6 6" />
     </>
   ),
   fade: (
@@ -54,18 +54,18 @@ const ART: Record<Service["art"], ReactNode> = {
       {Array.from({ length: 12 }, (_, i) => (
         <path key={i} d={`M70 ${100 + i * 20} H230`} strokeOpacity={0.05 + i * 0.03} strokeWidth="1" />
       ))}
-      <path d="M150 60 V340" stroke="#C25A43" strokeOpacity=".6" />
+      <path d="M150 60 V340" stroke="#EF6240" strokeOpacity=".6" />
     </>
   ),
   beard: (
     <>
       {head}
-      <path d="M100 250 C104 312 128 345 150 345 C172 345 196 312 200 250" stroke="#E8D9C4" strokeWidth="2" />
+      <path d="M100 250 C104 312 128 345 150 345 C172 345 196 312 200 250" stroke="#EBDFD0" strokeWidth="2" />
       {Array.from({ length: 16 }, (_, i) => {
         const x = 106 + i * 5.8;
         return <path key={i} d={`M${x} ${262 + Math.abs(i - 7.5) * -2} v${36 - Math.abs(i - 7.5) * 3}`} strokeOpacity=".55" strokeWidth="1.2" />;
       })}
-      <path d="M128 286 C140 280 160 280 172 286" stroke="#C25A43" strokeWidth="2" />
+      <path d="M128 286 C140 280 160 280 172 286" stroke="#EF6240" strokeWidth="2" />
     </>
   ),
   combo: (
@@ -75,7 +75,7 @@ const ART: Record<Service["art"], ReactNode> = {
         <path key={i} d={`M${100 + i * 9} 200 C${104 + i * 8} 170 ${114 + i * 6} 152 ${150 + (i - 6) * 3} 144`} strokeWidth="1.3" strokeOpacity=".7" />
       ))}
       <path d="M100 250 C104 312 128 345 150 345 C172 345 196 312 200 250" strokeWidth="2" />
-      <path d="M40 300 L260 90" stroke="#C25A43" strokeWidth="1.5" />
+      <path d="M40 300 L260 90" stroke="#EF6240" strokeWidth="1.5" />
     </>
   ),
   kids: (
@@ -84,7 +84,7 @@ const ART: Record<Service["art"], ReactNode> = {
       {Array.from({ length: 9 }, (_, i) => (
         <path key={i} d={`M${114 + i * 9} 215 C${118 + i * 8} 196 ${128 + i * 5} 184 ${150 + (i - 4) * 2} 178`} strokeWidth="1.3" strokeOpacity=".75" />
       ))}
-      <circle cx="150" cy="110" r="18" stroke="#C25A43" strokeWidth="1.5" />
+      <circle cx="150" cy="110" r="18" stroke="#EF6240" strokeWidth="1.5" />
       <path d="M150 128 V150 M132 380 V320 H168 V380" strokeOpacity=".45" strokeWidth="1.5" />
     </>
   ),
@@ -98,8 +98,8 @@ const ART: Record<Service["art"], ReactNode> = {
           strokeOpacity={0.35 + i * 0.07}
         />
       ))}
-      <rect x="196" y="300" width="56" height="44" rx="6" stroke="#C25A43" strokeWidth="1.5" />
-      <path d="M196 312 H252" stroke="#C25A43" strokeOpacity=".6" />
+      <rect x="196" y="300" width="56" height="44" rx="6" stroke="#EF6240" strokeWidth="1.5" />
+      <path d="M196 312 H252" stroke="#EF6240" strokeOpacity=".6" />
     </>
   ),
 };

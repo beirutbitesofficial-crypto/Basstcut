@@ -5,10 +5,12 @@
 @custom-variant lgr (@media (min-width: 1024px) and (prefers-reduced-motion: reduce));
 
 @theme {
-  --color-terracotta: #c25a43;
-  --color-beige: #e8d9c4;
-  --color-ink: #1e1e1e;
-  --color-offwhite: #f4f0e8;
+  /* BASST CUT brand — sampled from the official poster/logo */
+  --color-terracotta: #EF6240; /* Basst orange (accent) */
+  --color-rust: #8F311C; /* shop wall */
+  --color-beige: #EBDFD0;
+  --color-ink: #141110;
+  --color-offwhite: #F6F1EA;
 
   --font-display: var(--font-anton), "Impact", "Arial Narrow", sans-serif;
   --font-serif: var(--font-instrument), "Georgia", serif;
@@ -67,7 +69,7 @@ body {
 @utility texture-scratch {
   background-image:
     url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='600'><g stroke='%23F4F0E8' stroke-opacity='.05' fill='none'><path d='M40 80 L260 64'/><path d='M380 140 L590 168'/><path d='M120 420 L330 396'/><path d='M420 510 L560 520'/><path d='M10 300 L90 292'/><path d='M250 250 L270 330' stroke-opacity='.035'/><path d='M500 30 L520 110' stroke-opacity='.03'/></g></svg>"),
-    radial-gradient(ellipse at 50% 120%, rgba(194, 90, 67, 0.08), transparent 60%);
+    radial-gradient(ellipse at 50% 120%, rgba(239, 98, 64, 0.08), transparent 60%);
 }
 
 .vignette {
