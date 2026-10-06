@@ -2,7 +2,8 @@ import Hero from "@/components/Hero";
 import HaircutExperience from "@/components/HaircutExperience";
 import About from "@/components/About";
 import Services from "@/components/Services";
-import Booking from "@/components/Booking";
+import BookCta from "@/components/BookCta";
+import BookPill from "@/components/BookPill";
 import Location from "@/components/Location";
 import Footer from "@/components/Footer";
 
@@ -14,10 +15,11 @@ export default function Home() {
         <HaircutExperience />
         <About />
         <Services />
-        <Booking />
+        <BookCta />
         <Location />
       </main>
       <Footer />
+      <BookPill />
     </>
   );
 }

@@ -16,6 +16,11 @@ export const site = {
   ],
 };
 
+/** Link to the booking page, optionally preselecting a service. */
+export function bookingHref(service?: string) {
+  return service ? `/booking/?service=${encodeURIComponent(service)}` : "/booking/";
+}
+
 export type Service = {
   name: string;
   description: string;

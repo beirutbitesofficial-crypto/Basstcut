@@ -1,17 +1,21 @@
 {
-  "id": "/admin/",
-  "name": "BASST CUT Admin",
-  "short_name": "BASST Admin",
-  "description": "Approve bookings, manage services, prices and opening hours.",
-  "start_url": "/admin/",
-  "scope": "/admin/",
+  "id": "/booking/",
+  "name": "BASST CUT — Book your cut",
+  "short_name": "BASST CUT",
+  "description": "Book your haircut at BASST CUT, Abra, Sidon.",
+  "start_url": "/booking/?source=app",
+  "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#141110",
   "theme_color": "#141110",
+  "categories": ["lifestyle", "business"],
   "icons": [
     { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
     { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
     { "src": "/icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Book now", "url": "/booking/", "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }] }
   ]
 }

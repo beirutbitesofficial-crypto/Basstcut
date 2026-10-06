@@ -3,10 +3,9 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { gsap, MQ, useGSAP } from "@/lib/gsap";
-import { services, type Service } from "@/lib/site";
+import { bookingHref, services, type Service } from "@/lib/site";
 import ServiceArt from "./ServiceArt";
 import { SplitChars } from "./SplitText";
-import { requestBooking } from "./Booking";
 
 export default function Services() {
   const root = useRef<HTMLElement>(null);
@@ -180,16 +179,15 @@ function ServicePanel({ service, index }: { service: Service; index: number }) {
       </h3>
       <span className="svc-line mt-4 block h-px w-full origin-left bg-terracotta/70 lg:scale-x-0 lg:transition-transform lg:duration-700 lg:group-hover:scale-x-100" />
       <p className="mt-4 max-w-xs font-sans text-sm leading-relaxed text-beige/70">{service.description}</p>
-      <button
-        type="button"
-        onClick={() => requestBooking(service.name)}
+      <a
+        href={bookingHref(service.name)}
         className="mt-5 inline-flex min-h-11 items-center gap-3 font-sans text-[11px] font-semibold uppercase tracking-[0.35em] text-terracotta transition-colors hover:text-offwhite"
       >
         Book this
         <svg className="h-3 w-5" viewBox="0 0 24 12" fill="none" aria-hidden="true">
           <path d="M0 6 H22 M17 1 L22 6 L17 11" stroke="currentColor" strokeWidth="1.5" />
         </svg>
-      </button>
+      </a>
     </article>
   );
 }

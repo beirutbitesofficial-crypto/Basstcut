@@ -445,7 +445,7 @@ function fill_message(string $tpl, array $b): string
         '{price}' => $b['price'] ?? '',
         '{note}' => $b['note'] ?? '',
         '{admin_url}' => site_url() . '/admin/',
-        '{site_url}' => site_url() . '/#book',
+        '{site_url}' => site_url() . '/booking/',
     ];
     return strtr($tpl, $map);
 }

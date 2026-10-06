@@ -63,14 +63,18 @@ $csrf = $logged ? csrf_token() : '';
 <meta name="robots" content="noindex, nofollow">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="/icon.svg">
-<link rel="apple-touch-icon" href="/brand/basst-cut-logo-640.webp">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="BASST Admin">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>BASST CUT · Bookings</title>
 <style>
 :root{--o:#EF6240;--rust:#8F311C;--cream:#EBDFD0;--ink:#141110;--ink2:#1d1916;--ink3:#2a2420;--w:#F6F1EA;--mut:#a89c90;--ok:#4fb477;--r:14px}
 *{box-sizing:border-box}html,body{margin:0;background:var(--ink);color:var(--w);font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;-webkit-font-smoothing:antialiased}
 a{color:var(--o)}button,input,select,textarea{font:inherit;color:inherit}
 .wrap{max-width:880px;margin:0 auto;padding:16px 16px 96px}
-header{position:sticky;top:0;z-index:5;background:rgba(20,17,16,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--ink3)}
+header{position:sticky;top:0;z-index:5;padding-top:env(safe-area-inset-top);background:rgba(20,17,16,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--ink3)}
 .bar{max-width:880px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;gap:12px}
 .brand{font-weight:800;letter-spacing:.08em}.brand b{color:var(--o)}
 .badge{min-width:22px;height:22px;border-radius:11px;background:var(--o);color:var(--ink);font-size:12px;font-weight:700;display:inline-grid;place-items:center;padding:0 6px}
@@ -148,6 +152,7 @@ hr{border:0;border-top:1px solid var(--ink3);margin:20px 0}
       <span class="brand">BASST <b>CUT</b></span>
       <span class="badge" id="pendingBadge" hidden>0</span>
       <span class="sp"></span>
+      <button class="btn sm ghost" id="installBtn" hidden>Install app</button>
       <button class="btn sm ghost" id="notifBtn" hidden>Turn on alerts</button>
       <button class="btn sm ghost" id="logoutBtn">Log out</button>
     </div>
@@ -371,6 +376,17 @@ hr{border:0;border-top:1px solid var(--ink3);margin:20px 0}
   if ('Notification' in window && Notification.permission === 'default') {
     const nb = $('#notifBtn'); nb.hidden = false; nb.onclick = async () => { await Notification.requestPermission(); nb.hidden = true; };
   }
+  // Installable web app
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js', {scope: '/'}).catch(() => {});
+  let deferredInstall = null;
+  const standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+  window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredInstall = e; if (!standalone) $('#installBtn').hidden = false; });
+  if (!standalone && /iphone|ipad|ipod/i.test(navigator.userAgent)) $('#installBtn').hidden = false;
+  $('#installBtn').onclick = async () => {
+    if (deferredInstall) { deferredInstall.prompt(); await deferredInstall.userChoice.catch(() => {}); deferredInstall = null; $('#installBtn').hidden = true; }
+    else toast('On iPhone: tap Share in Safari, then “Add to Home Screen”.', 7000);
+  };
+
   render(); poll(); setInterval(poll, 20000);
   document.addEventListener('visibilitychange', () => { if (!document.hidden) { poll(); if (tab === 'requests' || tab === 'schedule') render(); } });
   </script>

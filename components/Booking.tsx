@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { gsap, MQ, ScrollTrigger, useGSAP } from "@/lib/gsap";
+import { gsap, MQ, useGSAP } from "@/lib/gsap";
 import { BrushStroke } from "./Brush";
 import { SplitWords } from "./SplitText";
 
@@ -19,12 +19,6 @@ type Booked = {
   timeLabel: string;
   date: string;
 };
-
-/** Ask the booking section to preselect a service (used by the Services panels). */
-export function requestBooking(serviceName?: string) {
-  window.dispatchEvent(new CustomEvent("basst:book", { detail: { service: serviceName } }));
-  document.getElementById("book")?.scrollIntoView({ behavior: "smooth", block: "start" });
-}
 
 async function getJSON<T>(url: string, init?: RequestInit): Promise<T> {
   const r = await fetch(url, { ...init, headers: { "Content-Type": "application/json", ...(init?.headers || {}) } });
@@ -87,15 +81,12 @@ export default function Booking() {
     } catch {}
   }, []);
 
-  // ---- preselect from the services section
+  // ---- preselect from /booking/?service=Fade (links on the landing page)
   useEffect(() => {
-    const onBook = (e: Event) => {
-      const wanted = (e as CustomEvent<{ service?: string }>).detail?.service?.toLowerCase();
-      const match = services?.find((s) => s.name.toLowerCase() === wanted);
-      if (match) setServiceId(match.id);
-    };
-    window.addEventListener("basst:book", onBook);
-    return () => window.removeEventListener("basst:book", onBook);
+    if (!services) return;
+    const wanted = new URLSearchParams(window.location.search).get("service")?.toLowerCase();
+    const match = wanted ? services.find((s) => s.name.toLowerCase() === wanted) : null;
+    if (match) setServiceId(match.id);
   }, [services]);
 
   // ---- free times for the chosen service + day
@@ -167,56 +158,19 @@ export default function Booking() {
     loadSlots();
   };
 
-  // ---- motion: heading reveal + floating "Book" pill
+  // ---- motion: entrance on page load
   useGSAP(
     () => {
       const mm = gsap.matchMedia();
       const q = gsap.utils.selector(root);
       mm.add(MQ, (ctx) => {
         const { reduced } = ctx.conditions as Record<keyof typeof MQ, boolean>;
-        const pill = document.querySelector(".book-pill");
-        if (reduced) {
-          gsap.set(pill, { autoAlpha: 1, y: 0 });
-          return;
-        }
-        gsap.fromTo(
-          q(".bk-title .word"),
-          { yPercent: 115 },
-          {
-            yPercent: 0,
-            stagger: 0.1,
-            ease: "power3.out",
-            scrollTrigger: { trigger: q(".bk-title")[0], start: "top 90%", end: "top 50%", scrub: 0.8 },
-          }
-        );
-        gsap.fromTo(
-          q(".bk-panel"),
-          { y: 60, autoAlpha: 0 },
-          { y: 0, autoAlpha: 1, ease: "power2.out", scrollTrigger: { trigger: q(".bk-panel")[0], start: "top 95%", end: "top 60%", scrub: 0.6 } }
-        );
-        // Pill shows after the haircut scene, hides while the booking section is on screen.
-        gsap.set(pill, { autoAlpha: 0, y: 20 });
-        const show = (on: boolean) => gsap.to(pill, { autoAlpha: on ? 1 : 0, y: on ? 0 : 20, duration: 0.4, ease: "power2.out", overwrite: true });
-        let afterIntro = false;
-        let inBook = false;
-        ScrollTrigger.create({
-          trigger: "#about",
-          start: "top bottom",
-          onToggle: (self) => {
-            afterIntro = self.isActive;
-            show(afterIntro && !inBook);
-          },
-          end: "max",
-        });
-        ScrollTrigger.create({
-          trigger: root.current,
-          start: "top 80%",
-          end: "bottom 20%",
-          onToggle: (self) => {
-            inBook = self.isActive;
-            show(afterIntro && !inBook);
-          },
-        });
+        if (reduced) return;
+        gsap
+          .timeline({ defaults: { ease: "expo.out" }, delay: 0.1 })
+          .fromTo(q(".bk-title .word"), { yPercent: 115 }, { yPercent: 0, duration: 1.2, stagger: 0.08 })
+          .fromTo(q(".bk-intro"), { y: 20, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 1, stagger: 0.08 }, 0.4)
+          .fromTo(q(".bk-panel"), { y: 50, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 1.2 }, 0.25);
       });
       return () => mm.revert();
     },
@@ -227,12 +181,12 @@ export default function Booking() {
 
   return (
     <>
-      <section ref={root} id="book" className="relative overflow-hidden bg-ink px-5 py-24 text-offwhite md:px-12 md:py-36">
+      <section ref={root} id="book" className="relative overflow-hidden bg-ink px-5 pb-24 pt-10 text-offwhite md:px-12 md:pb-32 md:pt-16">
         <div className="pointer-events-none absolute inset-0 texture-scratch opacity-30" aria-hidden="true" />
-        <div className="relative mx-auto grid max-w-[1400px] gap-12 lg:grid-cols-12 lg:gap-10">
+        <div className="relative mx-auto grid max-w-[1400px] gap-8 lg:grid-cols-12 lg:gap-10">
           <div className="min-w-0 lg:col-span-5">
-            <p className="mb-6 font-sans text-[11px] uppercase tracking-[0.45em] text-terracotta md:text-xs">N°04 — Booking</p>
-            <h2 className="bk-title font-display uppercase leading-[0.85] tracking-tight text-[19vw] lg:text-[7.4vw]">
+            <p className="bk-intro mb-4 font-sans lg:mb-6 text-[11px] uppercase tracking-[0.45em] text-terracotta md:text-xs">Abra, Sidon — Online booking</p>
+            <h2 className="bk-title font-display uppercase leading-[0.85] tracking-tight text-[13vw] lg:text-[6.6vw]">
               <span className="block">
                 <SplitWords text="Reserve" />
               </span>
@@ -243,8 +197,8 @@ export default function Booking() {
                 </span>
               </span>
             </h2>
-            <BrushStroke className="mt-1 h-4 w-56 text-terracotta md:h-6 md:w-80" />
-            <ol className="mt-10 space-y-5 font-sans text-sm text-beige/80 md:text-base">
+            <BrushStroke className="bk-intro mt-1 h-4 w-56 text-terracotta md:h-6 md:w-80" />
+            <ol className="bk-intro mt-10 hidden space-y-5 lg:block font-sans text-sm text-beige/80 md:text-base">
               {[
                 ["01", "Pick your cut, day and time."],
                 ["02", "The barber gets your request and confirms it."],
@@ -256,7 +210,7 @@ export default function Booking() {
                 </li>
               ))}
             </ol>
-            <p className="mt-8 max-w-sm font-sans text-xs leading-relaxed text-beige/60">
+            <p className="bk-intro mt-8 hidden max-w-sm font-sans text-xs leading-relaxed lg:block text-beige/60">
               Bookings open from {lead} minutes from now. Times already requested by someone else are not shown.
             </p>
           </div>
@@ -451,20 +405,6 @@ export default function Booking() {
         </div>
       </section>
 
-      {/* Floating book button */}
-      <a
-        href="#book"
-        onClick={(e) => {
-          e.preventDefault();
-          requestBooking();
-        }}
-        className="book-pill invisible fixed bottom-5 right-5 z-50 flex min-h-12 items-center gap-2 rounded-full bg-terracotta px-6 font-sans text-xs font-bold uppercase tracking-[0.3em] text-ink shadow-[0_12px_30px_-8px_rgba(239,98,64,0.6)] md:bottom-8 md:right-8"
-      >
-        Book
-        <svg className="h-3 w-5" viewBox="0 0 24 12" fill="none" aria-hidden="true">
-          <path d="M0 6 H22 M17 1 L22 6 L17 11" stroke="currentColor" strokeWidth="1.6" />
-        </svg>
-      </a>
     </>
   );
 }

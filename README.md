@@ -43,10 +43,22 @@ npm run build && npm start
 - The haircut scene rebuilds only on real width changes on touch devices, so mobile address-bar
   show/hide never re-lays out the pin.
 
+## URLs
+
+| URL | What |
+| --- | --- |
+| `basstcut.com` | Cinematic landing page (`app/page.tsx`) — "Book" buttons link to /booking/ |
+| `basstcut.com/booking` | Booking web app for clients (`app/booking/page.tsx`); `?service=Fade` preselects a service |
+| `basstcut.com/admin` | Barber admin web app (`public/admin/index.php`) |
+
+Both /booking and /admin are installable web apps (PWA): `public/manifest.webmanifest` (clients, starts at
+/booking/), `public/admin/manifest.json` (barber), service worker `public/sw.js` (never caches /api or /admin),
+icons in `public/icons/`. Android/desktop Chrome show an "Install app" button; on iPhone use Safari →
+Share → Add to Home Screen.
+
 ## Online booking (PHP + MySQL)
 
-The landing page has a booking section (`components/Booking.tsx`) backed by a small PHP API that ships
-inside the static export:
+The booking page (`components/Booking.tsx`) is backed by a small PHP API that ships inside the static export:
 
 | Path | What it is |
 | --- | --- |

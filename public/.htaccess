@@ -9,6 +9,15 @@ Options -Indexes
   Require all denied
 </FilesMatch>
 DirectoryIndex index.html index.php
+
+# Web app
+AddType application/manifest+json .webmanifest
+<IfModule mod_headers.c>
+  <Files "sw.js">
+    Header set Cache-Control "no-cache"
+    Header set Service-Worker-Allowed "/"
+  </Files>
+</IfModule>
 ErrorDocument 404 /404.html
 
 <IfModule mod_deflate.c>
