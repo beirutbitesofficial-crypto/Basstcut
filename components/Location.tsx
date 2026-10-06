@@ -97,7 +97,7 @@ export default function Location() {
 
       <div className="relative mx-auto grid max-w-[1400px] items-center gap-16 px-5 md:px-12 lg:grid-cols-12 lg:gap-10">
         <div className="lg:col-span-6">
-          <p className="lc-meta mb-6 font-sans text-[10px] uppercase tracking-[0.45em] text-terracotta md:text-xs">N°04 — Location</p>
+          <p className="lc-meta mb-6 font-sans text-[10px] uppercase tracking-[0.45em] text-terracotta md:text-xs">N°05 — Location</p>
           <h2 className="lc-title font-display uppercase leading-[0.85] tracking-tight text-[19vw] lg:text-[8.6vw]">
             <span className="block">
               <SplitWords text="Find" />

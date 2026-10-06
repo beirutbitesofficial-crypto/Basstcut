@@ -1,6 +1,14 @@
 # BASST CUT — static site on Hostinger (Apache / LiteSpeed)
 Options -Indexes
-DirectoryIndex index.html
+
+# Private PHP includes & config (api/_lib.php, api/_config.php) are never served directly
+<FilesMatch "^_.*\.php$">
+  Require all denied
+</FilesMatch>
+<FilesMatch "\.(sqlite|db|log)$">
+  Require all denied
+</FilesMatch>
+DirectoryIndex index.html index.php
 ErrorDocument 404 /404.html
 
 <IfModule mod_deflate.c>

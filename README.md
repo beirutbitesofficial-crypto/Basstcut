@@ -43,11 +43,47 @@ npm run build && npm start
 - The haircut scene rebuilds only on real width changes on touch devices, so mobile address-bar
   show/hide never re-lays out the pin.
 
+## Online booking (PHP + MySQL)
+
+The landing page has a booking section (`components/Booking.tsx`) backed by a small PHP API that ships
+inside the static export:
+
+| Path | What it is |
+| --- | --- |
+| `public/api/booking.php` | Public API: services, free time slots, create request, request status |
+| `public/api/admin.php` | Barber API (login, approve / decline / cancel, block time, services, settings) |
+| `public/api/_lib.php` | Shared logic: slots, conflicts, locking, WhatsApp drivers (never served directly) |
+| `public/admin/index.php` | Barber panel at **/admin/** — also the one-time setup wizard |
+
+**Rules**
+- Earliest bookable time = now + *lead minutes* (default 30), on the time grid (default 30 min).
+  Opening the page at 2:00 PM → first slot 2:30 PM.
+- Pending **and** approved bookings block their time; booking writes are serialized with a database lock,
+  so two clients can never get the same or overlapping time (checked again on approval).
+- Every request starts as **pending** → the barber approves or declines in /admin/ → the client is notified
+  on WhatsApp. The client's page updates live to "You're booked".
+- Services, durations, prices, opening hours, closed days, rules and message texts are edited in /admin/.
+  Prices also appear on the landing page services.
+
+**WhatsApp** (Settings → WhatsApp notifications)
+- *Manual* (default, free): the admin panel beeps / shows a notification for new requests (keep it open or
+  add it to the home screen); after approving, one tap opens WhatsApp with the confirmation pre-written.
+- *CallMeBot* (free): additionally sends every new request automatically to the barber's WhatsApp.
+- *WhatsApp Cloud API* (Meta): fully automatic messages to barber and clients. Needs a Meta Business account,
+  a phone number registered on the Cloud API and approved message templates.
+
+**Setup on Hostinger (once)**
+1. hPanel → Databases → create a MySQL database + user.
+2. Upload the site, open `https://your-domain/admin/` and fill in the setup form.
+   The config is saved *outside* `public_html` (`../basst-cut-config.php`), so re-uploading the site never
+   erases it.
+3. Log in → Settings: opening hours, barber WhatsApp number, notification method. Services & prices tab: edit.
+
 ## Hosting on Hostinger
 
 The site is configured as a **static export** (`output: "export"` in `next.config.ts`) — no Node.js needed.
 
-1. `npm install && npm run build` → everything is written to `out/` (≈1.2 MB, includes `.htaccess`).
+1. `npm install && npm run build` → everything is written to `out/` (includes `.htaccess`, `api/` and `admin/`).
 2. In hPanel → **Websites → Manage → File Manager**, open the domain's `public_html`.
 3. Upload the **contents** of `out/` (not the folder itself) — or upload a zip of them and use *Extract*.
    Make sure the hidden `.htaccess` file is included.

@@ -1,0 +1,10 @@
+{
+  "name": "BASST CUT Bookings",
+  "short_name": "BASST Admin",
+  "start_url": "/admin/",
+  "scope": "/admin/",
+  "display": "standalone",
+  "background_color": "#141110",
+  "theme_color": "#141110",
+  "icons": [{ "src": "/brand/basst-cut-logo-640.webp", "sizes": "640x640", "type": "image/webp" }]
+}
