@@ -3,7 +3,6 @@
 import { useRef } from "react";
 import { gsap, MQ, useGSAP } from "@/lib/gsap";
 import Logo from "./Logo";
-import { SplitChars } from "./SplitText";
 
 export default function Hero() {
   const root = useRef<HTMLElement>(null);
@@ -18,7 +17,7 @@ export default function Hero() {
 
         if (reduced) {
           gsap.set(q(".hero-reveal"), { autoAlpha: 1 });
-          gsap.set(q(".logo-arch"), { strokeDashoffset: 0 });
+          gsap.set(q(".logo-ring"), { strokeDashoffset: 0 });
           return;
         }
 
@@ -29,10 +28,9 @@ export default function Hero() {
           .fromTo(q(".hero-bg"), { scale: 1.3, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 2.6 }, 0)
           .fromTo(q(".hero-light"), { autoAlpha: 0, yPercent: -10 }, { autoAlpha: 1, yPercent: 0, duration: 2.2, ease: "power2.out" }, 0.4)
           .fromTo(q(".hero-grain"), { autoAlpha: 0 }, { autoAlpha: 1, duration: 1.6, ease: "none" }, 0.2)
-          .fromTo(q(".logo-arch"), { strokeDasharray: 1, strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 1.8, stagger: 0.15, ease: "power3.inOut" }, 0.5)
-          .fromTo(q(".logo-glyph"), { scale: 0.4, rotate: -40, autoAlpha: 0 }, { scale: 1, rotate: 0, autoAlpha: 1, duration: 1.6 }, 1.0)
-          .fromTo(q(".hero-title .char"), { yPercent: 120 }, { yPercent: 0, duration: 1.4, stagger: 0.06 }, 1.1)
-          .fromTo(q(".hero-tag .char"), { yPercent: 120, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 1.1, stagger: 0.025 }, 1.5)
+          .fromTo(q(".logo-ring"), { strokeDasharray: 1, strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 2, ease: "power3.inOut" }, 0.4)
+          // Badge opens like an iris, settling from a slight zoom
+          .fromTo(q(".logo-img"), { clipPath: "circle(0% at 50% 50%)", scale: 1.15 }, { clipPath: "circle(47.3% at 50% 50%)", scale: 1, duration: 1.8, ease: "expo.inOut" }, 0.6)
           .fromTo(q(".hero-loc"), { y: 20, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 1.2 }, 1.8)
           .fromTo(q(".hero-corner"), { autoAlpha: 0 }, { autoAlpha: 1, duration: 1.2, stagger: 0.1, ease: "power2.out" }, 2.0)
           .fromTo(q(".hero-scroll"), { y: 16, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 1 }, 2.2);
@@ -102,24 +100,14 @@ export default function Hero() {
 
       {/* Content */}
       <div className="hero-content relative z-10 flex h-full flex-col items-center justify-center px-5 text-center">
-        <div className="hero-logo hero-reveal invisible-pre mb-6 w-[26vw] max-w-[150px] md:mb-8 md:w-[11vw]">
-          <Logo className="h-auto w-full" />
+        <h1 className="sr-only">BASST CUT — Haircut &amp; Style, Abra, Sidon</h1>
+        <div className="hero-logo hero-reveal invisible-pre w-[min(78vw,46svh)] md:w-[min(34vw,52vh)]">
+          <Logo className="w-full" priority />
         </div>
-        <h1 className="hero-title hero-reveal invisible-pre font-display uppercase leading-[0.85] tracking-tight text-[22vw] md:text-[min(13vw,22vh)]">
-          <span className="sr-only">BASST CUT</span>
-          <span aria-hidden="true" className="flex flex-wrap justify-center gap-x-[0.2em]">
-            <SplitChars text="BASST" />
-            <SplitChars text="CUT" className="text-terracotta" />
-          </span>
-        </h1>
-        <p className="hero-tag hero-reveal invisible-pre mt-4 font-sans text-xs font-semibold uppercase tracking-[0.55em] text-beige md:mt-6 md:text-sm">
-          <span className="sr-only">Haircut &amp; Style</span>
-          <span aria-hidden="true">
-            <SplitChars text="HAIRCUT & STYLE" />
-          </span>
-        </p>
-        <p className="hero-loc hero-reveal invisible-pre mt-3 font-serif text-xl italic text-offwhite/70 md:text-2xl">
+        <p className="hero-loc hero-reveal invisible-pre mt-6 flex items-center gap-4 font-sans text-[11px] font-semibold uppercase tracking-[0.5em] text-beige/80 md:mt-8 md:text-xs">
+          <span className="h-px w-8 bg-terracotta/70 md:w-12" />
           Abra, Sidon
+          <span className="h-px w-8 bg-terracotta/70 md:w-12" />
         </p>
       </div>
 
