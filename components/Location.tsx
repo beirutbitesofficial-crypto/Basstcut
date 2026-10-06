@@ -97,7 +97,7 @@ export default function Location() {
 
       <div className="relative mx-auto grid max-w-[1400px] items-center gap-16 px-5 md:px-12 lg:grid-cols-12 lg:gap-10">
         <div className="lg:col-span-6">
-          <p className="lc-meta mb-6 font-sans text-[10px] uppercase tracking-[0.45em] text-terracotta md:text-xs">N°05 — Location</p>
+          <p className="lc-meta mb-6 font-sans text-[11px] uppercase tracking-[0.45em] text-terracotta md:text-xs">N°05 — Location</p>
           <h2 className="lc-title font-display uppercase leading-[0.85] tracking-tight text-[19vw] lg:text-[8.6vw]">
             <span className="block">
               <SplitWords text="Find" />
@@ -125,7 +125,7 @@ export default function Location() {
               href={site.directionsUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="lc-meta group inline-flex min-h-14 items-center gap-4 self-start rounded-full border border-terracotta px-7 py-4 font-sans text-xs font-semibold uppercase tracking-[0.35em] text-offwhite transition-colors duration-500 hover:bg-terracotta focus-visible:bg-terracotta focus-visible:outline-none"
+              className="lc-meta group inline-flex min-h-14 items-center gap-4 self-start rounded-full border border-terracotta px-7 py-4 font-sans text-xs font-semibold uppercase tracking-[0.35em] text-offwhite transition-colors duration-500 hover:bg-terracotta hover:text-ink focus-visible:bg-terracotta focus-visible:text-ink"
             >
               Get directions
               <svg className="h-3 w-6 transition-transform duration-500 group-hover:translate-x-1" viewBox="0 0 24 12" fill="none" aria-hidden="true">
@@ -148,7 +148,7 @@ export default function Location() {
             </div>
             <span className="absolute inset-x-0 bottom-0 h-[16%] bg-terracotta" aria-hidden="true" />
             <span className="absolute inset-x-0 bottom-[16%] h-px bg-ink/30" aria-hidden="true" />
-            <span className="absolute bottom-[5%] left-0 right-0 text-center font-sans text-[10px] uppercase tracking-[0.45em] text-offwhite">
+            <span className="absolute bottom-[5%] left-0 right-0 text-center font-sans text-[11px] uppercase tracking-[0.45em] text-offwhite">
               33.55° N · 35.40° E
             </span>
           </a>

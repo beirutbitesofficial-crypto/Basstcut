@@ -62,6 +62,10 @@ export default function Booking() {
   const [phone, setPhone] = useState("");
   const [note, setNote] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [touched, setTouched] = useState({ name: false, phone: false });
+  const nameError = name.trim().length < 2 ? "Enter your name." : null;
+  const phoneDigits = phone.replace(/\D/g, "");
+  const phoneError = phoneDigits.length < 7 || phoneDigits.length > 15 ? "Enter a valid WhatsApp number, e.g. 70 123 456." : null;
   const [error, setError] = useState<string | null>(null);
   const [booked, setBooked] = useState<(Booked & { token: string }) | null>(null);
 
@@ -127,6 +131,11 @@ export default function Booking() {
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!serviceId || !date || !time) return;
+    if (nameError || phoneError) {
+      setTouched({ name: true, phone: true });
+      document.getElementById(nameError ? "bk-name" : "bk-phone")?.focus();
+      return;
+    }
     setSubmitting(true);
     setError(null);
     const form = new FormData(e.currentTarget);
@@ -222,7 +231,7 @@ export default function Booking() {
         <div className="pointer-events-none absolute inset-0 texture-scratch opacity-30" aria-hidden="true" />
         <div className="relative mx-auto grid max-w-[1400px] gap-12 lg:grid-cols-12 lg:gap-10">
           <div className="min-w-0 lg:col-span-5">
-            <p className="mb-6 font-sans text-[10px] uppercase tracking-[0.45em] text-terracotta md:text-xs">N°04 — Booking</p>
+            <p className="mb-6 font-sans text-[11px] uppercase tracking-[0.45em] text-terracotta md:text-xs">N°04 — Booking</p>
             <h2 className="bk-title font-display uppercase leading-[0.85] tracking-tight text-[19vw] lg:text-[7.4vw]">
               <span className="block">
                 <SplitWords text="Reserve" />
@@ -247,7 +256,7 @@ export default function Booking() {
                 </li>
               ))}
             </ol>
-            <p className="mt-8 max-w-sm font-sans text-xs leading-relaxed text-beige/50">
+            <p className="mt-8 max-w-sm font-sans text-xs leading-relaxed text-beige/60">
               Bookings open from {lead} minutes from now. Times already requested by someone else are not shown.
             </p>
           </div>
@@ -260,7 +269,7 @@ export default function Booking() {
                 <p className="py-10 text-center font-sans text-beige/70">
                   {loadError}
                   <br />
-                  <span className="text-sm text-beige/50">Please message us on WhatsApp to book.</span>
+                  <span className="text-sm text-beige/60">Please message us on WhatsApp to book.</span>
                 </p>
               ) : !services ? (
                 <PanelSkeleton />
@@ -281,7 +290,7 @@ export default function Booking() {
                         >
                           <span>
                             <span className="block font-display text-xl uppercase leading-none tracking-tight">{s.name}</span>
-                            <span className="mt-1 block font-sans text-xs text-beige/50">{s.duration} min</span>
+                            <span className="mt-1 block font-sans text-xs text-beige/60">{s.duration} min</span>
                           </span>
                           {s.price && <span className="font-sans text-sm font-semibold text-terracotta">{s.price}</span>}
                         </button>
@@ -304,10 +313,10 @@ export default function Booking() {
                               onClick={() => setDate(d.date)}
                               aria-pressed={on}
                               className={`flex h-16 w-14 shrink-0 flex-col items-center justify-center rounded-2xl border font-sans transition-colors disabled:opacity-25 ${
-                                on ? "border-terracotta bg-terracotta text-white" : "border-offwhite/10 hover:border-offwhite/30"
+                                on ? "border-terracotta bg-terracotta text-ink" : "border-offwhite/10 hover:border-offwhite/30"
                               }`}
                             >
-                              <span className="text-[10px] uppercase tracking-wider opacity-80">{l.top}</span>
+                              <span className="text-[11px] uppercase tracking-wider opacity-80">{l.top}</span>
                               <span className="text-lg font-bold leading-tight">{l.bottom}</span>
                             </button>
                           );
@@ -319,9 +328,9 @@ export default function Booking() {
                   {/* 3. Time */}
                   <Step n="3" title="Pick a time" dim={!service || !date}>
                     {!service ? (
-                      <p className="font-sans text-sm text-beige/40">Choose a service first.</p>
+                      <p className="font-sans text-sm text-beige/60">Choose a service first.</p>
                     ) : slotsLoading || slots === null ? (
-                      <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
+                      <div className="grid grid-cols-3 gap-2 sm:grid-cols-4" aria-busy="true" aria-label="Loading free times">
                         {Array.from({ length: 8 }, (_, i) => (
                           <span key={i} className="h-11 animate-pulse rounded-xl bg-offwhite/5" />
                         ))}
@@ -337,7 +346,7 @@ export default function Booking() {
                             onClick={() => setTime(t)}
                             aria-pressed={time === t}
                             className={`h-11 rounded-xl border font-sans text-sm font-semibold transition-colors ${
-                              time === t ? "border-terracotta bg-terracotta text-white" : "border-offwhite/10 hover:border-offwhite/30"
+                              time === t ? "border-terracotta bg-terracotta text-ink" : "border-offwhite/10 hover:border-offwhite/30"
                             }`}
                           >
                             {to12h(t)}
@@ -351,33 +360,61 @@ export default function Booking() {
                   <Step n="4" title="Your details" dim={!time} last>
                     <div className="grid gap-3 sm:grid-cols-2">
                       <label className="block">
-                        <span className="mb-1 block font-sans text-xs text-beige/50">Name</span>
+                        <span className="mb-1 block font-sans text-xs text-beige/60">Name</span>
                         <input
+                          id="bk-name"
                           required
                           value={name}
                           onChange={(e) => setName(e.target.value)}
+                          onBlur={() => setTouched((t) => ({ ...t, name: true }))}
                           autoComplete="name"
-                          className="h-12 w-full rounded-xl border border-offwhite/10 bg-ink px-4 font-sans text-base outline-none focus:border-terracotta"
+                          aria-invalid={touched.name && !!nameError}
+                          aria-describedby={touched.name && nameError ? "bk-name-err" : undefined}
+                          className={`h-12 w-full rounded-xl border bg-ink px-4 font-sans text-base outline-none focus:border-terracotta ${
+                            touched.name && nameError ? "border-terracotta" : "border-offwhite/10"
+                          }`}
                         />
+                        {touched.name && nameError && (
+                          <span id="bk-name-err" className="mt-1 block font-sans text-xs text-terracotta">
+                            {nameError}
+                          </span>
+                        )}
                       </label>
                       <label className="block">
-                        <span className="mb-1 block font-sans text-xs text-beige/50">WhatsApp number</span>
-                        <span className="flex h-12 items-center rounded-xl border border-offwhite/10 bg-ink focus-within:border-terracotta">
-                          <span className="pl-4 pr-2 font-sans text-sm text-beige/50">+961</span>
+                        <span className="mb-1 block font-sans text-xs text-beige/60">WhatsApp number</span>
+                        <span
+                          className={`flex h-12 items-center rounded-xl border bg-ink focus-within:border-terracotta ${
+                            touched.phone && phoneError ? "border-terracotta" : "border-offwhite/10"
+                          }`}
+                        >
+                          <span className="pl-4 pr-2 font-sans text-sm text-beige/60">+961</span>
                           <input
                             required
                             value={phone}
+                            id="bk-phone"
                             onChange={(e) => setPhone(e.target.value)}
+                            onBlur={() => setTouched((t) => ({ ...t, phone: true }))}
+                            aria-invalid={touched.phone && !!phoneError}
+                            aria-describedby={touched.phone && phoneError ? "bk-phone-err" : "bk-phone-hint"}
                             inputMode="tel"
                             autoComplete="tel-national"
                             placeholder="70 123 456"
                             className="h-full w-full min-w-0 bg-transparent pr-4 font-sans text-base outline-none"
                           />
                         </span>
+                        {touched.phone && phoneError ? (
+                          <span id="bk-phone-err" className="mt-1 block font-sans text-xs text-terracotta">
+                            {phoneError}
+                          </span>
+                        ) : (
+                          <span id="bk-phone-hint" className="mt-1 block font-sans text-xs text-beige/60">
+                            Your confirmation arrives on this number.
+                          </span>
+                        )}
                       </label>
                     </div>
                     <label className="mt-3 block">
-                      <span className="mb-1 block font-sans text-xs text-beige/50">Note (optional)</span>
+                      <span className="mb-1 block font-sans text-xs text-beige/60">Note (optional)</span>
                       <input
                         value={note}
                         onChange={(e) => setNote(e.target.value)}
@@ -396,8 +433,9 @@ export default function Booking() {
 
                     <button
                       type="submit"
-                      disabled={!service || !date || !time || name.trim().length < 2 || phone.replace(/\D/g, "").length < 7 || submitting}
-                      className="mt-5 flex min-h-14 w-full items-center justify-center gap-3 rounded-full bg-terracotta px-6 font-sans text-xs font-bold uppercase tracking-[0.3em] text-white transition-opacity disabled:opacity-30"
+                      disabled={!service || !date || !time || submitting}
+                      aria-busy={submitting}
+                      className="mt-5 flex min-h-14 w-full items-center justify-center gap-3 rounded-full bg-terracotta px-6 font-sans text-xs font-bold uppercase tracking-[0.3em] text-ink transition-opacity disabled:opacity-30"
                     >
                       {submitting
                         ? "Sending…"
@@ -420,7 +458,7 @@ export default function Booking() {
           e.preventDefault();
           requestBooking();
         }}
-        className="book-pill invisible fixed bottom-5 right-5 z-50 flex min-h-12 items-center gap-2 rounded-full bg-terracotta px-6 font-sans text-xs font-bold uppercase tracking-[0.3em] text-white shadow-[0_12px_30px_-8px_rgba(239,98,64,0.6)] md:bottom-8 md:right-8"
+        className="book-pill invisible fixed bottom-5 right-5 z-50 flex min-h-12 items-center gap-2 rounded-full bg-terracotta px-6 font-sans text-xs font-bold uppercase tracking-[0.3em] text-ink shadow-[0_12px_30px_-8px_rgba(239,98,64,0.6)] md:bottom-8 md:right-8"
       >
         Book
         <svg className="h-3 w-5" viewBox="0 0 24 12" fill="none" aria-hidden="true">
@@ -435,7 +473,7 @@ function Step({ n, title, children, dim, last }: { n: string; title: string; chi
   return (
     <fieldset className={`min-w-0 ${last ? "" : "mb-7 border-b border-offwhite/10 pb-7"} transition-opacity ${dim ? "opacity-40" : ""}`}>
       <legend className="mb-4 flex items-center gap-3 font-sans text-[11px] font-semibold uppercase tracking-[0.35em] text-beige/70">
-        <span className="grid h-6 w-6 place-items-center rounded-full border border-terracotta/60 text-[10px] text-terracotta">{n}</span>
+        <span className="grid h-6 w-6 place-items-center rounded-full border border-terracotta/60 text-[11px] text-terracotta">{n}</span>
         {title}
       </legend>
       {children}
@@ -463,7 +501,7 @@ function Confirmation({ booked, onNew }: { booked: Booked; onNew: () => void }) 
           approved ? "bg-[#4fb477] text-ink" : declined ? "bg-offwhite/10" : "bg-terracotta/15 text-terracotta"
         }`}
       >
-        {approved ? "✓" : declined ? "✕" : <span className="animate-pulse">⏳</span>}
+        {approved ? <IconCheck /> : declined ? <IconX /> : <IconClock />}
       </div>
       <h3 className="mt-6 font-display text-4xl uppercase tracking-tight md:text-5xl">
         {approved ? "You're booked." : declined ? "Not available." : "Request sent."}
@@ -492,8 +530,32 @@ function Confirmation({ booked, onNew }: { booked: Booked; onNew: () => void }) 
 function Row({ k, v, accent }: { k: string; v: string; accent?: boolean }) {
   return (
     <div className="flex justify-between gap-4 border-b border-offwhite/5 py-2 text-sm last:border-0">
-      <span className="text-beige/50">{k}</span>
+      <span className="text-beige/60">{k}</span>
       <span className={accent ? "font-semibold text-terracotta" : "font-semibold"}>{v}</span>
     </div>
+  );
+}
+
+const iconProps = { className: "h-7 w-7", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 2, strokeLinecap: "round" as const, strokeLinejoin: "round" as const, "aria-hidden": true };
+function IconCheck() {
+  return (
+    <svg {...iconProps}>
+      <path d="M5 12.5l4.5 4.5L19 7.5" />
+    </svg>
+  );
+}
+function IconX() {
+  return (
+    <svg {...iconProps}>
+      <path d="M6 6l12 12M18 6L6 18" />
+    </svg>
+  );
+}
+function IconClock() {
+  return (
+    <svg {...iconProps} className="h-7 w-7 motion-safe:animate-pulse">
+      <circle cx="12" cy="12" r="8.5" />
+      <path d="M12 7.5V12l3 2" />
+    </svg>
   );
 }

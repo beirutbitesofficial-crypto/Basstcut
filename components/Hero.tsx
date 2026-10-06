@@ -117,16 +117,16 @@ export default function Hero() {
         <BrushSlashes className="hero-corner hero-reveal invisible-pre absolute -left-6 top-[18%] h-[38%] text-terracotta/45 md:left-0 md:h-[48%]" />
         <BrushSlashes className="hero-corner hero-reveal invisible-pre absolute -right-6 bottom-[8%] h-[34%] rotate-180 text-terracotta/40 md:right-0 md:h-[44%]" />
         {/* Corners — tiny editorial details */}
-        <div className="hero-corner hero-reveal invisible-pre absolute left-5 top-5 font-sans text-[10px] uppercase tracking-[0.4em] text-offwhite/50 md:left-10 md:top-8">
+        <div className="hero-corner hero-reveal invisible-pre absolute left-5 top-5 font-sans text-[11px] uppercase tracking-[0.4em] text-offwhite/50 md:left-10 md:top-8">
           Barbershop
         </div>
-        <div className="hero-corner hero-reveal invisible-pre absolute right-5 top-5 font-sans text-[10px] uppercase tracking-[0.4em] text-offwhite/50 md:right-10 md:top-8">
+        <div className="hero-corner hero-reveal invisible-pre absolute right-5 top-5 font-sans text-[11px] uppercase tracking-[0.4em] text-offwhite/50 md:right-10 md:top-8">
           Lebanon
         </div>
 
         {/* Scroll indicator */}
         <div className="hero-scroll hero-reveal invisible-pre absolute bottom-6 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-3 md:bottom-8">
-          <span className="font-sans text-[9px] uppercase tracking-[0.5em] text-offwhite/60">Scroll to discover</span>
+          <span className="font-sans text-[11px] uppercase tracking-[0.5em] text-offwhite/60">Scroll to discover</span>
           <span className="relative block h-10 w-px overflow-hidden bg-offwhite/15">
             <span className="scroll-tick absolute inset-x-0 top-0 h-1/2 bg-terracotta" />
           </span>

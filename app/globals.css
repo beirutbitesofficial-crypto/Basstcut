@@ -19,6 +19,8 @@
 
 html {
   background: var(--color-ink);
+  /* keep focused fields clear of the floating Book button */
+  scroll-padding-bottom: 96px;
   -webkit-text-size-adjust: 100%;
 }
 
@@ -30,6 +32,19 @@ body {
   body {
     overflow-x: clip;
   }
+}
+
+/* Visible keyboard focus everywhere (mouse clicks stay clean) */
+:focus-visible {
+  outline: 2px solid var(--color-terracotta);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+button:not(:disabled),
+[role="button"],
+a[href] {
+  cursor: pointer;
 }
 
 ::selection {

@@ -73,13 +73,13 @@ a{color:var(--o)}button,input,select,textarea{font:inherit;color:inherit}
 header{position:sticky;top:0;z-index:5;background:rgba(20,17,16,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--ink3)}
 .bar{max-width:880px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;gap:12px}
 .brand{font-weight:800;letter-spacing:.08em}.brand b{color:var(--o)}
-.badge{min-width:22px;height:22px;border-radius:11px;background:var(--o);color:#fff;font-size:12px;font-weight:700;display:inline-grid;place-items:center;padding:0 6px}
+.badge{min-width:22px;height:22px;border-radius:11px;background:var(--o);color:var(--ink);font-size:12px;font-weight:700;display:inline-grid;place-items:center;padding:0 6px}
 .sp{flex:1}
 .tabs{display:flex;gap:6px;max-width:880px;margin:0 auto;padding:0 16px 10px;overflow-x:auto}
 .tab{border:1px solid var(--ink3);background:none;border-radius:999px;padding:8px 14px;white-space:nowrap;cursor:pointer;color:var(--mut)}
 .tab.on{background:var(--w);color:var(--ink);border-color:var(--w)}
 .btn{border:0;border-radius:10px;padding:11px 16px;font-weight:700;cursor:pointer;background:var(--ink3);min-height:44px}
-.btn.p{background:var(--o);color:#fff}.btn.ok{background:var(--ok);color:#0b1a10}.btn.ghost{background:none;border:1px solid var(--ink3)}
+.btn.p{background:var(--o);color:var(--ink)}.btn.ok{background:var(--ok);color:#0b1a10}.btn.ghost{background:none;border:1px solid var(--ink3)}
 .btn.sm{padding:7px 12px;min-height:36px;font-size:13px}.btn:disabled{opacity:.5}
 .card{background:var(--ink2);border:1px solid var(--ink3);border-radius:var(--r);padding:16px;margin:12px 0}
 .card.pending{border-color:rgba(239,98,64,.6);box-shadow:0 0 0 1px rgba(239,98,64,.15)}
@@ -91,6 +91,7 @@ h2{font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:var(--mut);
 label{display:block;font-size:12px;color:var(--mut);margin:12px 0 4px;letter-spacing:.04em}
 input,select,textarea{width:100%;background:var(--ink);border:1px solid var(--ink3);border-radius:10px;padding:11px 12px;min-height:44px}
 textarea{min-height:90px}input:focus,select:focus,textarea:focus{outline:2px solid var(--o);border-color:transparent}
+:focus-visible{outline:2px solid var(--o);outline-offset:2px}button:not(:disabled){cursor:pointer}
 .grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}.grid3{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr) minmax(0,1fr);gap:10px}
 .hours{display:grid;grid-template-columns:40px minmax(0,1fr) minmax(0,1fr) auto;gap:6px;align-items:center;margin:6px 0}.hours input[type=time]{padding:10px 6px;min-width:0;font-size:14px}
 .hours input[type=checkbox]{width:22px;min-height:22px;height:22px}
@@ -147,7 +148,7 @@ hr{border:0;border-top:1px solid var(--ink3);margin:20px 0}
       <span class="brand">BASST <b>CUT</b></span>
       <span class="badge" id="pendingBadge" hidden>0</span>
       <span class="sp"></span>
-      <button class="btn sm ghost" id="notifBtn" hidden>🔔 Alerts</button>
+      <button class="btn sm ghost" id="notifBtn" hidden>Turn on alerts</button>
       <button class="btn sm ghost" id="logoutBtn">Log out</button>
     </div>
     <nav class="tabs">
@@ -259,10 +260,10 @@ hr{border:0;border-top:1px solid var(--ink3);margin:20px 0}
       try {
         const d = await api(act, {id, reason});
         const n = d.notice;
-        if (n && n.sent) toast(act === 'approve' ? '✅ Approved — client notified on WhatsApp' : 'Done — client notified on WhatsApp');
+        if (n && n.sent) toast(act === 'approve' ? 'Approved — client notified on WhatsApp' : 'Done — client notified on WhatsApp');
         else if (n && n.wa_link) {
           // Opening WhatsApp needs a tap (browsers block automatic pop-ups)
-          const t = toast(`${act === 'approve' ? '✅ Approved.' : 'Done.'} <a class="btn p sm" href="${n.wa_link}" target="_blank" rel="noopener">Send WhatsApp to client</a>`, 0);
+          const t = toast(`${act === 'approve' ? 'Approved.' : 'Done.'} <a class="btn p sm" href="${n.wa_link}" target="_blank" rel="noopener">Send WhatsApp to client</a>`, 0);
           t.querySelector('a').addEventListener('click', () => setTimeout(() => t.remove(), 300));
         } else toast('Done');
         render(); poll();
@@ -344,7 +345,7 @@ hr{border:0;border-top:1px solid var(--ink3);margin:20px 0}
         msg_barber: $('#mB').value, msg_approved: $('#mA').value, msg_rejected: $('#mR').value, msg_received: $('#mRc').value};
       try { await api('settings_save', {settings}); toast('Settings saved'); } catch (e) { toast(esc(e.message)); }
     };
-    $('#testBtn').onclick = async () => { try { const {result} = await api('test_notify', {}); toast(result.sent ? 'Test sent ✅' : 'Not sent: ' + esc(result.error)); } catch (e) { toast(esc(e.message)); } };
+    $('#testBtn').onclick = async () => { try { const {result} = await api('test_notify', {}); toast(result.sent ? 'Test sent' : 'Not sent: ' + esc(result.error)); } catch (e) { toast(esc(e.message)); } };
     $('#pwBtn').onclick = async () => { try { await api('password', {password: $('#newPw').value}); toast('Password changed'); $('#newPw').value = ''; } catch (e) { toast(esc(e.message)); } };
   }
 
@@ -361,8 +362,8 @@ hr{border:0;border-top:1px solid var(--ink3);margin:20px 0}
       document.title = (d.pending ? `(${d.pending}) ` : '') + 'BASST CUT · Bookings';
       if (lastLatest !== null && d.latestId > lastLatest) {
         beep(); navigator.vibrate?.([200, 100, 200]);
-        if ('Notification' in window && Notification.permission === 'granted') new Notification('New booking request ✂️', {body: 'Open BASST CUT admin to approve', icon: '/brand/basst-cut-logo-640.webp'});
-        toast('🔔 New booking request!'); if (tab === 'requests' || tab === 'schedule') render();
+        if ('Notification' in window && Notification.permission === 'granted') new Notification('New booking request', {body: 'Open BASST CUT admin to approve', icon: '/brand/basst-cut-logo-640.webp'});
+        toast('New booking request'); if (tab === 'requests' || tab === 'schedule') render();
       }
       lastLatest = d.latestId;
     } catch (e) {}

@@ -34,7 +34,7 @@ export default function Footer() {
         </nav>
       </div>
 
-      <div className="mx-auto mt-14 flex max-w-[1400px] items-center justify-between border-t border-dashed border-offwhite/15 pt-6 font-sans text-[10px] uppercase tracking-[0.35em] text-offwhite/40">
+      <div className="mx-auto mt-14 flex max-w-[1400px] items-center justify-between border-t border-dashed border-offwhite/15 pt-6 font-sans text-[11px] uppercase tracking-[0.35em] text-offwhite/60">
         <span>© BASST CUT</span>
         <ScissorsOutline className="w-12 text-terracotta/70" />
       </div>

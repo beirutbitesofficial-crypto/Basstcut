@@ -120,7 +120,7 @@ export default function Services() {
       >
         {/* Intro panel */}
         <header className="shrink-0 lgr:col-span-3 hz:w-[40vw]">
-          <p className="mb-6 font-sans text-[10px] uppercase tracking-[0.45em] text-terracotta md:text-xs">N°03 — Services</p>
+          <p className="mb-6 font-sans text-[11px] uppercase tracking-[0.45em] text-terracotta md:text-xs">N°03 — Services</p>
           <h2 className="sv-title font-display uppercase leading-[0.84] tracking-tight text-[20vw] lg:text-[10vw]">
             <span className="sr-only">Choose your cut.</span>
             <span aria-hidden="true" className="block">
@@ -143,7 +143,7 @@ export default function Services() {
         {/* Hand-off to Location (desktop) */}
         <div className="sv-next hidden shrink-0 items-center justify-center hz:flex hz:w-[34vw]" aria-hidden="true">
           <div className="sv-next-arch arch flex aspect-[3/4] w-[24vw] items-end justify-center border border-b-0 border-terracotta/60 pb-10">
-            <span className="font-sans text-[10px] uppercase tracking-[0.45em] text-beige/60">Next — Find us</span>
+            <span className="font-sans text-[11px] uppercase tracking-[0.45em] text-beige/60">Next — Find us</span>
           </div>
         </div>
       </div>
@@ -171,9 +171,9 @@ function ServicePanel({ service, index }: { service: Service; index: number }) {
         <span className="pointer-events-none absolute inset-0 bg-terracotta/0 mix-blend-multiply transition-colors duration-700 group-hover:bg-terracotta/20" />
       </div>
 
-      <div className="mt-6 flex items-center justify-between font-sans text-[10px] uppercase tracking-[0.35em] text-beige/60 md:text-xs">
+      <div className="mt-6 flex items-center justify-between font-sans text-[11px] uppercase tracking-[0.35em] text-beige/60 md:text-xs">
         <span>{String(index + 1).padStart(2, "0")}</span>
-        <span className="text-beige/50">{service.price ?? "$ —"}</span>
+        <span className="text-beige/60">{service.price ?? "$ —"}</span>
       </div>
       <h3 className="svc-name mt-3 font-display text-[13vw] uppercase leading-[0.9] tracking-tight transition-[translate,color] duration-500 group-hover:translate-x-2 group-hover:text-terracotta lg:text-[3.4vw]">
         {service.name}

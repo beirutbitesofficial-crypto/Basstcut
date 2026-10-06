@@ -274,7 +274,7 @@ export default function HaircutExperience() {
                 </span>
               </span>
             </h2>
-            <p className="hidden md:block max-w-[16rem] pb-3 text-right font-sans text-xs uppercase tracking-[0.3em] text-ink/60">
+            <p className="hidden md:block max-w-[16rem] pb-3 text-right font-sans text-xs uppercase tracking-[0.3em] text-ink/70">
               <span className="block overflow-hidden">
                 <span className="hx-line block">N°01 — The cut</span>
               </span>
@@ -284,7 +284,7 @@ export default function HaircutExperience() {
 
         {/* Reveal 2 */}
         <div className="hx-brand absolute inset-x-0 top-[34%] flex flex-col items-center px-5 text-center md:top-[36%]">
-          <p className="hx-sub mb-4 font-sans text-[10px] uppercase tracking-[0.45em] text-ink/60 md:text-xs">
+          <p className="hx-sub mb-4 font-sans text-[11px] uppercase tracking-[0.45em] text-ink/70 md:text-xs">
             Precision in every cut
           </p>
           <h2 className="font-display uppercase leading-[0.82] tracking-tight text-[21vw] md:text-[min(15vw,24vh)]">
@@ -297,7 +297,7 @@ export default function HaircutExperience() {
           <span className="hx-rule mt-3 block w-52 origin-left text-terracotta md:mt-4 md:w-[26rem]">
             <BrushStroke className="h-4 w-full md:h-7" />
           </span>
-          <p className="hx-sub mt-5 font-sans text-xs font-semibold uppercase tracking-[0.5em] text-terracotta md:text-sm">
+          <p className="hx-sub mt-5 font-sans text-xs font-semibold uppercase tracking-[0.5em] text-rust md:text-sm">
             Haircut &amp; Style
           </p>
           <p className="hx-sub mt-2 font-serif text-lg italic text-ink/70 md:text-xl">Abra, Sidon</p>
@@ -322,12 +322,12 @@ export default function HaircutExperience() {
 
       {/* ---------- HUD ---------- */}
       <div className="hx-hint pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 text-center">
-        <p className="font-sans text-[10px] uppercase tracking-[0.5em] text-offwhite/70 md:text-xs">
+        <p className="font-sans text-[11px] uppercase tracking-[0.5em] text-offwhite/70 md:text-xs">
           Keep scrolling — the cut begins
         </p>
       </div>
       <div className="hx-hud pointer-events-none absolute right-5 top-5 flex items-center gap-3 md:right-12 md:top-8">
-        <span className="font-sans text-[10px] uppercase tracking-[0.35em] text-offwhite/60 mix-blend-difference">Cut</span>
+        <span className="font-sans text-[11px] uppercase tracking-[0.35em] text-offwhite/60 mix-blend-difference">Cut</span>
         <span className="relative block h-px w-20 bg-offwhite/20 md:w-32">
           <span className="hx-bar absolute inset-0 origin-left bg-terracotta" />
         </span>

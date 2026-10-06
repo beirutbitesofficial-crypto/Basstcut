@@ -140,7 +140,7 @@ export default function About() {
       </div>
 
       <div className="relative mx-auto max-w-[1400px] px-5 md:px-12">
-        <p className="ab-eyebrow mb-8 font-sans text-[10px] uppercase tracking-[0.45em] text-terracotta md:mb-12 md:text-xs">
+        <p className="ab-eyebrow mb-8 font-sans text-[11px] uppercase tracking-[0.45em] text-terracotta md:mb-12 md:text-xs">
           N°02 — BASST CUT
         </p>
 
