@@ -75,7 +75,8 @@ only runs it:
 - Every push to `main` triggers `.github/workflows/deploy.yml`, which builds the app and publishes a
   ready-to-run copy (Next.js `standalone` server, ~4 MB) to the **`deploy`** branch.
 - Hostinger deploys the `deploy` branch, a plain Node.js app with everything bundled in `app/`
-  (no `next` dependency for the host to detect, nothing to install or compile) → `npm start` (`node app/server.js`).
+  (no `next` dependency for the host to detect, nothing to install or compile). `npm run build` only copies
+  `app/` to the top level (the host expects a `.next` folder) → `npm start` (`node server.js`).
 
 Steps:
 1. hPanel → **Databases → MySQL** → create a database + user.
