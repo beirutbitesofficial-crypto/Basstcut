@@ -1,0 +1,40 @@
+name: Build deploy branch
+
+# Builds the app on GitHub (where Next.js compiles fine) and publishes a ready-to-run
+# copy to the `deploy` branch. Hostinger deploys that branch and only runs `npm start`.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: deploy
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+      - run: npx tsc --noEmit
+      - run: npm run build
+      - run: node scripts/assemble-deploy.mjs dist-deploy
+
+      - name: Publish to the deploy branch
+        run: |
+          cd dist-deploy
+          git init -q -b deploy
+          git add -A
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit -q -m "Build ${GITHUB_SHA::7} from main"
+          git push -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" deploy

@@ -69,25 +69,22 @@ Data lives in **MySQL**. Tables are created automatically on first request.
 
 ## Deploy on Hostinger (Node.js web app from GitHub)
 
-1. hPanel → **Databases → MySQL** → create a database + user (note host, name, user, password).
-2. hPanel → **Websites → Add website → Node.js web app** → **Import from GitHub** → repo `basstcut`, branch `main`.
-3. Settings:
-   - Framework: **Next.js**
-   - Node version: **20** or **22**
-   - Build command: `npm run build`
-   - Start command: `npm start`
-4. **Environment variables** (see `.env.example`):
+Hostinger's servers can't run Next.js's native compiler, so the app is **built on GitHub** and Hostinger
+only runs it:
 
-   | Name | Value |
-   | --- | --- |
-   | `DB_HOST` | from hPanel (often `localhost`) |
-   | `DB_USER` / `DB_PASSWORD` / `DB_NAME` | your MySQL details |
-   | `ADMIN_PASSWORD` | password for /admin |
-   | `SESSION_SECRET` | any long random text |
-   | `SITE_URL` | `https://basstcut.com` (optional) |
+- Every push to `main` triggers `.github/workflows/deploy.yml`, which builds the app and publishes a
+  ready-to-run copy (Next.js `standalone` server, ~4 MB) to the **`deploy`** branch.
+- Hostinger deploys the `deploy` branch: `npm install` (4 runtime packages) → `npm start` (`node server.js`).
 
-5. Deploy. Then open `/admin`, log in, set opening hours and the barber WhatsApp number.
-   Every push to `main` redeploys automatically.
+Steps:
+1. hPanel → **Databases → MySQL** → create a database + user.
+2. Node.js web app → **Import from GitHub** → repo `basstcut`, branch **`deploy`**.
+3. Settings: Node **20** or **22** · Build command `npm run build` (does nothing) · Start command `npm start`.
+4. Environment variables (see `.env.example`): `DB_HOST`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`,
+   `ADMIN_PASSWORD`, `SESSION_SECRET`, optional `SITE_URL`.
+5. Deploy, open `/admin`, log in, set opening hours and the barber WhatsApp number.
+
+To build the deploy copy by hand: `npm run build && node scripts/assemble-deploy.mjs dist-deploy`.
 
 ## Local development
 

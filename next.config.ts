@@ -4,6 +4,9 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   trailingSlash: true,
+  // Self-contained server (server.js + only the files it needs). GitHub Actions builds it and
+  // publishes it to the "deploy" branch, so the host never has to compile anything.
+  output: "standalone",
   // mysql2 runs on the server only; keep it out of the bundle.
   serverExternalPackages: ["mysql2"],
   // Photos are pre-optimized WebP; skip the on-server image optimizer (no native deps needed on the host).
