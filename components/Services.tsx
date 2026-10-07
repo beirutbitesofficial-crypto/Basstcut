@@ -13,7 +13,7 @@ export default function Services() {
   // Live prices from the booking admin (falls back to lib/site.ts when unavailable).
   const [prices, setPrices] = useState<Record<string, string>>({});
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_BOOKING_API ?? "/api/booking.php"}?action=config`)
+    fetch("/api/booking/?action=config")
       .then((r) => r.json())
       .then((d) => {
         if (!d?.ok) return;

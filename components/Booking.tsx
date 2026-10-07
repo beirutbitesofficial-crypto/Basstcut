@@ -6,8 +6,8 @@ import { site } from "@/lib/site";
 import { BrushStroke } from "./Brush";
 import { SplitWords } from "./SplitText";
 
-/** PHP API shipped in public/api (works on Hostinger). Override for local dev if needed. */
-const API = process.env.NEXT_PUBLIC_BOOKING_API ?? "/api/booking.php";
+/** Next.js API route: app/api/booking/route.ts */
+const API = "/api/booking/";
 const STORE_KEY = "basst-cut:last-booking";
 
 type Service = { id: number; name: string; duration: number; price: string | null };

@@ -314,7 +314,6 @@ export function SettingsView() {
   const [s, setS] = useState<Settings | null>(null);
   const [closed, setClosed] = useState("");
   const [saving, setSaving] = useState(false);
-  const [newPw, setNewPw] = useState("");
 
   useEffect(() => {
     adminApi<{ settings: Settings }>("settings")
@@ -482,25 +481,9 @@ export function SettingsView() {
         </Button>
       </div>
 
-      <SectionTitle>Admin password</SectionTitle>
-      <Card>
-        <div className="flex gap-2">
-          <input type="password" className={inputCls} placeholder="New password (min 8)" value={newPw} onChange={(e) => setNewPw(e.target.value)} aria-label="New password" />
-          <Button
-            onClick={async () => {
-              try {
-                await adminApi("password", { password: newPw });
-                toast("Password changed");
-                setNewPw("");
-              } catch (e) {
-                toast((e as Error).message);
-              }
-            }}
-          >
-            Change
-          </Button>
-        </div>
-      </Card>
+      <p className="mt-8 font-sans text-xs text-beige/60">
+        The admin password is the ADMIN_PASSWORD environment variable of the web app in Hostinger.
+      </p>
     </>
   );
 }

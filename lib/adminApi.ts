@@ -1,5 +1,4 @@
-/** Tiny client for the PHP admin API (public/api/admin.php). */
-const BASE = process.env.NEXT_PUBLIC_API_BASE ?? "/api";
+/** Tiny client for the admin API route (app/api/admin/route.ts). */
 
 let csrf: string | null = null;
 export const setCsrf = (t: string | null) => {
@@ -19,20 +18,10 @@ export async function adminApi<T = Record<string, unknown>>(action: string, body
     init.headers = { "Content-Type": "application/json", ...(csrf ? { "X-CSRF": csrf } : {}) };
     init.body = JSON.stringify(body);
   }
-  const r = await fetch(`${BASE}/admin.php?action=${action}${query}`, init);
+  const r = await fetch(`/api/admin/?action=${action}${query}`, init);
   const d = await r.json().catch(() => ({ ok: false, error: "Network error — check your connection." }));
   if (!d.ok) throw new ApiError(d.error || "Something went wrong", r.status);
   return d as T;
-}
-
-export async function runSetup(values: Record<string, string>) {
-  const r = await fetch(`${BASE}/setup.php`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(values),
-  });
-  const d = await r.json().catch(() => ({ ok: false, error: "Network error" }));
-  if (!d.ok) throw new Error(d.error || "Setup failed");
 }
 
 export type AdminBooking = {

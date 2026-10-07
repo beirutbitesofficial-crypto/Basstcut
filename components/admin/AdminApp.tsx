@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { adminApi, ApiError, runSetup, setCsrf } from "@/lib/adminApi";
+import { adminApi, ApiError, setCsrf } from "@/lib/adminApi";
 import { Button, Field, inputCls, ToastProvider, useToast } from "./ui";
 import { RequestsView, ScheduleView, ServicesView, SettingsView } from "./Views";
 
@@ -33,7 +33,7 @@ function Gate() {
 
   if (error) return <Centered><p className="text-center font-sans text-beige/80">{error}</p></Centered>;
   if (!session) return <Centered><p className="text-center font-sans text-beige/60">Loading…</p></Centered>;
-  if (!session.installed) return <SetupScreen onDone={load} />;
+  if (!session.installed) return <SetupScreen />;
   if (!session.loggedIn) return <LoginScreen onDone={load} />;
   return <Shell onLoggedOut={load} />;
 }
@@ -56,49 +56,23 @@ function BrandBadge() {
   );
 }
 
-/* ---------------- setup (first run) ---------------- */
+/* ---------------- not configured yet ---------------- */
 
-function SetupScreen({ onDone }: { onDone: () => void }) {
-  const [v, setV] = useState({ db_host: "localhost", db_name: "", db_user: "", db_pass: "", barber_whatsapp: "", admin_password: "" });
-  const [busy, setBusy] = useState(false);
-  const [err, setErr] = useState<string | null>(null);
-  const set = (k: keyof typeof v) => (e: React.ChangeEvent<HTMLInputElement>) => setV({ ...v, [k]: e.target.value });
-
+function SetupScreen() {
+  const vars = ["DB_HOST", "DB_USER", "DB_PASSWORD", "DB_NAME", "ADMIN_PASSWORD", "SESSION_SECRET"];
   return (
     <Centered>
       <BrandBadge />
-      <h1 className="text-center font-display text-4xl uppercase tracking-tight">Set up bookings</h1>
-      <p className="mt-2 text-center font-sans text-sm text-beige/70">
-        One-time setup. Create a MySQL database in hPanel → Databases, then fill this in.
+      <h1 className="text-center font-display text-4xl uppercase tracking-tight">Almost ready</h1>
+      <p className="mt-3 text-center font-sans text-sm leading-relaxed text-beige/70">
+        Add these environment variables to the web app in Hostinger, then redeploy:
       </p>
-      <form
-        className="mt-6 space-y-3"
-        onSubmit={async (e) => {
-          e.preventDefault();
-          setBusy(true);
-          setErr(null);
-          try {
-            await runSetup(v);
-            onDone();
-          } catch (x) {
-            setErr((x as Error).message);
-          } finally {
-            setBusy(false);
-          }
-        }}
-      >
-        <Field label="Database host"><input className={inputCls} value={v.db_host} onChange={set("db_host")} /></Field>
-        <Field label="Database name"><input className={inputCls} required value={v.db_name} onChange={set("db_name")} placeholder="u123456789_basst" /></Field>
-        <Field label="Database user"><input className={inputCls} required value={v.db_user} onChange={set("db_user")} placeholder="u123456789_basst" /></Field>
-        <Field label="Database password"><input className={inputCls} type="password" value={v.db_pass} onChange={set("db_pass")} /></Field>
-        <hr className="!my-5 border-offwhite/10" />
-        <Field label="Barber WhatsApp number"><input className={inputCls} inputMode="tel" required value={v.barber_whatsapp} onChange={set("barber_whatsapp")} placeholder="70 123 456" /></Field>
-        <Field label="Admin password (min 8 characters)">
-          <input className={inputCls} type="password" required minLength={8} value={v.admin_password} onChange={set("admin_password")} />
-        </Field>
-        {err && <p role="alert" className="rounded-xl border border-terracotta/50 bg-terracotta/10 px-3 py-2 font-sans text-sm">{err}</p>}
-        <Button variant="primary" className="w-full" disabled={busy}>{busy ? "Setting up…" : "Create booking system"}</Button>
-      </form>
+      <ul className="mt-5 space-y-2 rounded-2xl border border-offwhite/10 bg-[#1b1714] p-4 font-mono text-sm">
+        {vars.map((v) => (
+          <li key={v}>{v}</li>
+        ))}
+      </ul>
+      <p className="mt-4 text-center font-sans text-xs text-beige/60">The database tables are created automatically on first use.</p>
     </Centered>
   );
 }
