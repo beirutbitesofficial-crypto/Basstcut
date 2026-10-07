@@ -74,12 +74,14 @@ only runs it:
 
 - Every push to `main` triggers `.github/workflows/deploy.yml`, which builds the app and publishes a
   ready-to-run copy (Next.js `standalone` server, ~4 MB) to the **`deploy`** branch.
-- Hostinger deploys the `deploy` branch: `npm install` (4 runtime packages) → `npm start` (`node server.js`).
+- Hostinger deploys the `deploy` branch, a plain Node.js app with everything bundled in `app/`
+  (no `next` dependency for the host to detect, nothing to install or compile) → `npm start` (`node app/server.js`).
 
 Steps:
 1. hPanel → **Databases → MySQL** → create a database + user.
 2. Node.js web app → **Import from GitHub** → repo `basstcut`, branch **`deploy`**.
-3. Settings: Node **20** or **22** · Build command `npm run build` (does nothing) · Start command `npm start`.
+3. Settings: framework **Other / Express / Node.js** (not Next.js) · Node **20** or **22** · Build command `npm run build`
+   (does nothing) · Start command `npm start` (entry file `app/server.js` if asked).
 4. Environment variables (see `.env.example`): `DB_HOST`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`,
    `ADMIN_PASSWORD`, `SESSION_SECRET`, optional `SITE_URL`.
 5. Deploy, open `/admin`, log in, set opening hours and the barber WhatsApp number.
