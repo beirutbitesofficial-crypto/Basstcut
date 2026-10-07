@@ -49,12 +49,17 @@ npm run build && npm start
 | --- | --- |
 | `basstcut.com` | Cinematic landing page (`app/page.tsx`) — "Book" buttons link to /booking/ |
 | `basstcut.com/booking` | Booking web app for clients (`app/booking/page.tsx`); `?service=Fade` preselects a service |
-| `basstcut.com/admin` | Barber admin web app (`public/admin/index.php`) |
+| `basstcut.com/admin` | Barber admin web app — React (`app/admin/page.tsx`, `components/admin/`) |
 
 Both /booking and /admin are installable web apps (PWA): `public/manifest.webmanifest` (clients, starts at
 /booking/), `public/admin/manifest.json` (barber), service worker `public/sw.js` (never caches /api or /admin),
 icons in `public/icons/`. Android/desktop Chrome show an "Install app" button; on iPhone use Safari →
 Share → Add to Home Screen.
+
+## Architecture
+
+Everything you see is **Next.js + React** (static export). A thin PHP + MySQL API in `public/api/` handles
+bookings, so the whole thing runs on ordinary Hostinger shared hosting — no Node.js server needed.
 
 ## Online booking (PHP + MySQL)
 
@@ -65,7 +70,7 @@ The booking page (`components/Booking.tsx`) is backed by a small PHP API that sh
 | `public/api/booking.php` | Public API: services, free time slots, create request, request status |
 | `public/api/admin.php` | Barber API (login, approve / decline / cancel, block time, services, settings) |
 | `public/api/_lib.php` | Shared logic: slots, conflicts, locking, WhatsApp drivers (never served directly) |
-| `public/admin/index.php` | Barber panel at **/admin/** — also the one-time setup wizard |
+| `public/api/setup.php` | One-time setup (database + admin password), used by the React admin on first run |
 
 **Rules**
 - Earliest bookable time = now + *lead minutes* (default 30), on the time grid (default 30 min).

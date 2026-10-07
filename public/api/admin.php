@@ -8,11 +8,19 @@ require __DIR__ . '/_lib.php';
 
 header('X-Robots-Tag: noindex');
 
+$action = $_GET['action'] ?? '';
+
+// Lets the React admin decide which screen to show: setup, login or the app.
+if ($action === 'session') {
+    $installed = is_installed();
+    $logged = $installed && admin_logged_in();
+    json_out(['ok' => true, 'installed' => $installed, 'loggedIn' => $logged, 'csrf' => $logged ? csrf_token() : null]);
+}
+
 if (!is_installed()) {
     fail('Not set up', 503);
 }
 
-$action = $_GET['action'] ?? '';
 $in = body_json();
 
 try {
