@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { gsap, MQ, useGSAP } from "@/lib/gsap";
+import { site } from "@/lib/site";
 import { BrushStroke } from "./Brush";
 import { SplitWords } from "./SplitText";
 
@@ -220,11 +221,18 @@ export default function Booking() {
               {booked ? (
                 <Confirmation booked={booked} onNew={reset} />
               ) : loadError ? (
-                <p className="py-10 text-center font-sans text-beige/70">
-                  {loadError}
-                  <br />
-                  <span className="text-sm text-beige/60">Please message us on WhatsApp to book.</span>
-                </p>
+                <div className="py-10 text-center font-sans" role="alert">
+                  <p className="text-lg text-offwhite">Online booking is not available right now.</p>
+                  <p className="mt-2 text-sm text-beige/60">{loadError}</p>
+                  <a
+                    href={site.socials.find((x) => x.label === "WhatsApp")?.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-6 inline-flex min-h-12 items-center justify-center rounded-full bg-terracotta px-6 text-xs font-bold uppercase tracking-[0.3em] text-ink"
+                  >
+                    Book on WhatsApp
+                  </a>
+                </div>
               ) : !services ? (
                 <PanelSkeleton />
               ) : (
