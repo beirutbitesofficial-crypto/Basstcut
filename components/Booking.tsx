@@ -212,7 +212,7 @@ export default function Booking() {
               ))}
             </ol>
             <p className="bk-intro mt-8 hidden max-w-sm font-sans text-xs leading-relaxed lg:block text-beige/60">
-              Bookings open from {lead} minutes from now. Times already requested by someone else are not shown.
+              Pick any day and time. The earliest time today is {lead} minutes from now — e.g. at 12:00 you can book 12:30. Times already taken are not shown.
             </p>
           </div>
 

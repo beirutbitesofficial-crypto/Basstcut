@@ -30,7 +30,7 @@ export type Settings = {
   msg_received: string;
 };
 
-const DAY: [string, string][] = [["10:00", "21:00"]];
+const DAY: [string, string][] = [["08:00", "20:00"]]; // default 8 AM – 8 PM, every day
 export const DEFAULT_SETTINGS: Settings = {
   hours: { "1": DAY, "2": DAY, "3": DAY, "4": DAY, "5": DAY, "6": DAY, "7": DAY },
   closed_dates: [],
