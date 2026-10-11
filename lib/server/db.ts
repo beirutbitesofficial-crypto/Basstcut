@@ -80,6 +80,17 @@ async function migrate(p: Pool) {
     KEY bc_bookings_status (status)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`);
 
+  await p.query(`CREATE TABLE IF NOT EXISTS bc_push_subs (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    endpoint_hash CHAR(64) NOT NULL,
+    endpoint TEXT NOT NULL,
+    p256dh VARCHAR(200) NOT NULL,
+    auth VARCHAR(100) NOT NULL,
+    device VARCHAR(120) NULL,
+    created_at VARCHAR(19) NOT NULL,
+    UNIQUE KEY bc_push_subs_endpoint (endpoint_hash)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`);
+
   const [{ n }] = await rows<{ n: number }>(p, "SELECT COUNT(*) AS n FROM bc_services");
   const seeded = await rows(p, "SELECT 1 FROM bc_settings WHERE k = 'seeded'");
   if (Number(n) === 0 && seeded.length === 0) {

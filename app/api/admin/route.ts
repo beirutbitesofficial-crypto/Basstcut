@@ -8,6 +8,7 @@ import { addDays, addMin, validDate } from "@/lib/server/time";
 import { adminConfigured, checkPassword, createSession, currentCsrf, destroySession, isAdmin } from "@/lib/server/auth";
 import { body, clientIp, Conflict, fail, json, str } from "@/lib/server/http";
 import { notifyBarberNew, notifyClient, siteUrl } from "@/lib/server/whatsapp";
+import { countSubscriptions, pushPublicKey, pushToBarber, removeSubscription, saveSubscription } from "@/lib/server/push";
 
 export const dynamic = "force-dynamic";
 
@@ -154,6 +155,22 @@ async function handle(req: Request) {
     case "test_notify": {
       const fake = { customer_name: "Test Client", phone: s.barber_whatsapp, service_name: "Haircut", start_at: fmt(addMin(nowWall(), 60)), code: "BC-TEST" };
       return json({ ok: true, result: await notifyBarberNew(s, fake, siteUrl(req)) });
+    }
+
+    case "push_key":
+      return json({ ok: true, publicKey: await pushPublicKey(pool), devices: await countSubscriptions(pool) });
+
+    case "push_subscribe":
+      await saveSubscription(pool, inp.subscription as never, str(inp.device, 120) || "phone");
+      return json({ ok: true, devices: await countSubscriptions(pool) });
+
+    case "push_unsubscribe":
+      await removeSubscription(pool, str(inp.endpoint, 2000));
+      return json({ ok: true });
+
+    case "push_test": {
+      const r = await pushToBarber(pool, { title: "✂️ BASST CUT", body: "Notifications are working. New bookings will appear like this.", tag: "test" });
+      return json({ ok: true, ...r });
     }
 
     case "password":

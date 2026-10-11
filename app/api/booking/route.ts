@@ -12,7 +12,8 @@ import {
 } from "@/lib/server/booking";
 import { body, clientIp, Conflict, fail, json, str } from "@/lib/server/http";
 import { fillMessage, notifyBarberNew, sendWhatsApp, siteUrl } from "@/lib/server/whatsapp";
-import { validDate } from "@/lib/server/time";
+import { niceDate, niceTime, validDate } from "@/lib/server/time";
+import { pushToBarber } from "@/lib/server/push";
 
 export const dynamic = "force-dynamic";
 
@@ -126,9 +127,17 @@ export async function POST(req: Request) {
     });
 
     // Notify after commit — a notification failure must never lose the booking.
+    // Push + WhatsApp go out in parallel so the barber hears about it within seconds.
     const base = siteUrl(req);
-    const notified = await notifyBarberNew(s, booking, base);
-    if (s.notify_driver === "cloud") await sendWhatsApp(s, phone, fillMessage(s.msg_received, booking, base));
+    const [notified] = await Promise.all([
+      notifyBarberNew(s, booking, base).catch(() => ({ sent: false })),
+      pushToBarber(pool, {
+        title: "✂️ New booking request",
+        body: `${name} — ${sv.name}\n${niceDate(booking.start_at)} at ${niceTime(booking.start_at)}`,
+        tag: `booking-${booking.code}`,
+      }).catch((e) => console.error("[push]", e)),
+      s.notify_driver === "cloud" ? sendWhatsApp(s, phone, fillMessage(s.msg_received, booking, base)).catch(() => null) : null,
+    ]);
 
     return json({
       ok: true,

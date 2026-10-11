@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { adminApi, ApiError, setCsrf } from "@/lib/adminApi";
 import { Button, Field, inputCls, ToastProvider, useToast } from "./ui";
 import { RequestsView, ScheduleView, ServicesView, SettingsView } from "./Views";
+import { usePush } from "./usePush";
 
 type Session = { installed: boolean; loggedIn: boolean; csrf: string | null };
 type Tab = "requests" | "schedule" | "services" | "settings";
@@ -133,7 +134,6 @@ function Shell({ onLoggedOut }: { onLoggedOut: () => void }) {
   const [pending, setPending] = useState(0);
   const [refreshKey, setRefreshKey] = useState(0);
   const latest = useRef<number | null>(null);
-  const [notifAsk, setNotifAsk] = useState(false);
   const [install, setInstall] = useState<InstallEvent | "ios" | null>(null);
 
   const refresh = useCallback(() => setRefreshKey((k) => k + 1), []);
@@ -145,11 +145,9 @@ function Shell({ onLoggedOut }: { onLoggedOut: () => void }) {
       setPending(d.pending);
       document.title = (d.pending ? `(${d.pending}) ` : "") + "BASST CUT · Admin";
       if (latest.current !== null && d.latestId > latest.current) {
+        // (Closed-app alerts come from push notifications; this is the in-app cue.)
         beep();
         navigator.vibrate?.([200, 100, 200]);
-        if ("Notification" in window && Notification.permission === "granted") {
-          new Notification("New booking request", { body: "Open BASST CUT Admin to approve", icon: "/icons/icon-192.png" });
-        }
         toast("New booking request");
         refresh();
       }
@@ -161,7 +159,10 @@ function Shell({ onLoggedOut }: { onLoggedOut: () => void }) {
 
   useEffect(() => {
     poll();
-    const id = window.setInterval(poll, 20000);
+    const id = window.setInterval(poll, 10000);
+    // A push notification arrived while the app is open → refresh immediately.
+    const onMsg = (e: MessageEvent) => e.data?.type === "basst:new-booking" && poll();
+    navigator.serviceWorker?.addEventListener("message", onMsg);
     const onVis = () => {
       if (!document.hidden) {
         poll();
@@ -171,13 +172,13 @@ function Shell({ onLoggedOut }: { onLoggedOut: () => void }) {
     document.addEventListener("visibilitychange", onVis);
     return () => {
       window.clearInterval(id);
+      navigator.serviceWorker?.removeEventListener("message", onMsg);
       document.removeEventListener("visibilitychange", onVis);
     };
   }, [poll, refresh]);
 
   // Alerts permission + install
   useEffect(() => {
-    if ("Notification" in window && Notification.permission === "default") setNotifAsk(true);
     if ("serviceWorker" in navigator) navigator.serviceWorker.register("/sw.js", { scope: "/" }).catch(() => {});
     const standalone =
       window.matchMedia("(display-mode: standalone)").matches || (navigator as Navigator & { standalone?: boolean }).standalone;
@@ -226,11 +227,6 @@ function Shell({ onLoggedOut }: { onLoggedOut: () => void }) {
               Install app
             </Button>
           )}
-          {notifAsk && (
-            <Button size="sm" onClick={async () => { await Notification.requestPermission(); setNotifAsk(false); }}>
-              Turn on alerts
-            </Button>
-          )}
           <Button size="sm" onClick={async () => { await adminApi("logout", {}).catch(() => null); onLoggedOut(); }}>
             Log out
           </Button>
@@ -251,6 +247,7 @@ function Shell({ onLoggedOut }: { onLoggedOut: () => void }) {
         </nav>
       </header>
       <main className="mx-auto max-w-3xl px-4 pb-28 pt-4">
+        <PushCard />
         {tab === "requests" && <RequestsView refreshKey={refreshKey} onChanged={() => { refresh(); poll(); }} />}
         {tab === "schedule" && <ScheduleView refreshKey={refreshKey} onChanged={() => { refresh(); poll(); }} />}
         {tab === "services" && <ServicesView />}
@@ -278,3 +275,69 @@ function beep() {
   } catch {}
 }
 
+
+/* ---------------- push notifications card ---------------- */
+
+function PushCard() {
+  const toast = useToast();
+  const { state, enable, disable, test } = usePush();
+  if (state === "checking") return null;
+
+  const sendTest = async () => {
+    try {
+      const r = await test();
+      toast(r.sent ? "Test sent — it should appear in a few seconds." : "No device subscribed yet.");
+    } catch (e) {
+      toast((e as Error).message);
+    }
+  };
+
+  if (state === "on")
+    return (
+      <div className="mb-4 flex flex-wrap items-center gap-3 rounded-2xl border border-[#4fb477]/40 bg-[#4fb477]/10 px-4 py-3 font-sans text-sm">
+        <span className="flex-1">
+          <b className="text-[#4fb477]">Notifications are on</b> for this phone — new bookings arrive instantly, even with the app closed.
+        </span>
+        <Button size="sm" onClick={sendTest}>Send test</Button>
+        <Button size="sm" onClick={() => disable().then(() => toast("Notifications turned off on this phone"))}>Turn off</Button>
+      </div>
+    );
+
+  const box = "mb-4 rounded-2xl border border-terracotta/50 bg-terracotta/10 p-4 font-sans text-sm";
+  if (state === "install-first")
+    return (
+      <div className={box}>
+        <b>Get instant notifications on iPhone:</b> open this page in <b>Safari</b> → tap <b>Share</b> → <b>Add to Home Screen</b>.
+        Then open <b>BASST Admin</b> from the home screen and tap “Turn on notifications”.
+      </div>
+    );
+  if (state === "blocked")
+    return (
+      <div className={box}>
+        <b>Notifications are blocked</b> for this site. Allow them in your phone settings (Settings → Notifications → BASST Admin,
+        or the browser&apos;s site settings), then reload.
+      </div>
+    );
+  if (state === "unsupported")
+    return <div className={box}>This browser can&apos;t receive notifications. Use Chrome on Android or the installed app on iPhone.</div>;
+
+  return (
+    <div className={`${box} flex flex-wrap items-center gap-3`}>
+      <span className="flex-1">
+        <b>Turn on notifications</b> to get every new booking instantly on this phone — even when the app is closed.
+      </span>
+      <Button
+        variant="primary"
+        disabled={state === "working"}
+        onClick={() =>
+          enable()
+            .then((ok) => ok && toast("Notifications on ✓ — sending a test…"))
+            .then(() => sendTest())
+            .catch(() => toast("Couldn't turn on notifications. Try again."))
+        }
+      >
+        {state === "working" ? "Turning on…" : "Turn on notifications"}
+      </Button>
+    </div>
+  );
+}
